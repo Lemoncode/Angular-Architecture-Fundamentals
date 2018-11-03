@@ -9,6 +9,9 @@ import { WelcomeComponent } from './home/welcome.component';
 import { ShellComponent } from './home/shell.component';
 import { PageNotFoundComponent } from './home/page-not-found.component';
 
+/* Feature Modules */
+import { UserModule } from './user/user.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +22,7 @@ import { PageNotFoundComponent } from './home/page-not-found.component';
   ],
   imports: [
     BrowserModule,
+    UserModule,
     AppRoutingModule
   ],
   providers: [],
