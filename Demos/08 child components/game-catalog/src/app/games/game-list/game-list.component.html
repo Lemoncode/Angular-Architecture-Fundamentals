@@ -1,0 +1,51 @@
+<div class='panel panel-primary'>
+  <!-- <div class='panel-heading'>
+      {{pageTitle}}
+  </div> -->
+
+  <div>
+      <div class="row">
+        <app-criteria #filterCriteria
+         [displayDetail]="includeDetail"
+         [hitCount]="filteredGames?.length"
+         (valueChange)="onValueChange($event)"
+         class="col-md-10">
+        </app-criteria>
+      </div>
+      <div class='table-responsive'>
+          <table class='table'
+                  *ngIf='games && games.length'>
+              <thead>
+                  <tr>
+                      <th>
+                          <button class='btn btn-primary'
+                              (click)='toggleImage()'>
+                              {{showImage ? 'Hide' : 'Show'}} Image
+                          </button>
+                      </th>
+                      <th>Game</th>
+                      <th>Code</th>
+                      <th>Available</th>
+                      <th>Price</th>
+                      <th></th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor='let game of filteredGames'>
+                      <td>
+                          <img *ngIf='showImage && game.imageUrl'
+                               [src]='game.imageUrl'
+                               [title]='game.name'
+                               [style.width.px]='imageWidth'
+                               [style.margin.px]='imageMargin'>
+                      </td>
+                      <td>{{ game.name }}</td>
+                      <td>{{ game.code }}</td>
+                      <td>{{ game.release }}</td>
+                      <td>{{ game.price | currency:'USD':'symbol':'1.2-2'}}</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
