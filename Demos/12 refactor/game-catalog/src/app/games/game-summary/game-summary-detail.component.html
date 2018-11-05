@@ -1,0 +1,51 @@
+<div class='panel panel-primary' *ngIf='groduct'>
+  <div class='panel-heading'>
+      Game Detail: {{game.name}}
+  </div>
+
+  <div class='panel-body'>
+      <div class='row'>
+          <div class='col-md-6'>
+              <div class='row'>
+                  <div class='col-md-3'>Name:</div>
+                  <div class='col-md-6'>{{game.name}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>Code:</div>
+                  <div class='col-md-6'>{{game.code}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>Description:</div>
+                  <div class='col-md-6'>{{game.description}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>Availability:</div>
+                  <div class='col-md-6'>{{game.release}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>Price:</div>
+                  <div class='col-md-6'>{{game.price|currency:'USD':'symbol'}}</div>
+              </div>
+              <div class='row'>
+                  <div class='col-md-3'>Rating:</div>
+                  <div class='col-md-6'>{{game.rating}}</div>
+              </div>
+          </div>
+
+          <div class='col-md-6'>
+              <img *ngIf='game.imageUrl'
+                   class='center-block img-responsive'
+                   [style.width.px]='200'
+                   [style.margin.px]='2'
+                   [src]='game.imageUrl'
+                   [title]='game.name'>
+          </div>
+      </div>
+  </div>
+
+  <div class='panel-footer'>
+      <a class="btn btn-primary" style="width:80px" [routerLink]="['/games', game.id, 'edit']">
+          Edit
+      </a>
+  </div>
+</div>

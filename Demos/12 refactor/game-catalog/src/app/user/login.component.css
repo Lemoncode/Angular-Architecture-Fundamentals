@@ -1,0 +1,12 @@
+.panel-heading {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.has-error span {
+  color: maroon;
+}
+
+.has-error .form-control {
+  border-color: red;
+}
