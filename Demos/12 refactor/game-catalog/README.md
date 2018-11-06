@@ -63,7 +63,7 @@ export class GameSummaryListComponent implements OnInit {
 ### Step 4. Create `game-summary-detail` component.
 
 ```html
-<div class='panel panel-primary' *ngIf='groduct'>
+<div class='panel panel-primary' *ngIf='game'>
   <div class='panel-heading'>
       Game Detail: {{game.name}}
   </div>
