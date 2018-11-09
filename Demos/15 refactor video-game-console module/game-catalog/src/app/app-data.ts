@@ -1,8 +1,9 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
 
-import { IGame } from './game.model';
+import { IGame } from './games/game.model';
+import { VideoConsoleModel } from './video-consoles/video-console.model';
 
-export class GameData implements InMemoryDbService {
+export class AppData implements InMemoryDbService {
   createDb() {
     const games: IGame[] = [
       {
@@ -40,6 +41,32 @@ export class GameData implements InMemoryDbService {
       },
     ];
 
-    return { games };
+    const videoconsoles: VideoConsoleModel[] = [
+      {
+        name: 'Nintendo Entertaiment System',
+        code: 'NES-0',
+        description: 'One of the most retro video console ever',
+        id: 1,
+        rating: 3,
+      },
+      {
+        name: 'Atari',
+        code: 'A-2',
+        description: 'Atari forever',
+        id: 2,
+        rating: 1,
+      },
+      {
+        name: 'Mega Drive',
+        code: 'MD',
+        description: 'The first 16 bit console?',
+        id: 3,
+        rating: 4,
+      },
+    ];
+    return {
+      games,
+      videoconsoles
+    };
   }
 }

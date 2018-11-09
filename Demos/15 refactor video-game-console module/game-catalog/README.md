@@ -351,5 +351,451 @@ $ ng g c video-consoles/video-console-edit --module=video-consoles --spec false
   Error: {{ errorMessage }}
 </div>
 
+```
+
+```typescript
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { VideoConsoleModel } from '../video-console.model';
+
+import { Subscription } from 'rxjs';
+
+import { GenericValidator } from '../../shared/generic-validator';
+import { NumberValidators } from '../../shared/number.validator';
+import { VideoConsoleService } from '../video-console.service';
+
+
+@Component({
+  selector: 'app-video-console-edit',
+  templateUrl: './video-console-edit.component.html',
+  styleUrls: ['./video-console-edit.component.css']
+})
+export class VideoConsoleEditComponent implements OnInit, OnDestroy {
+  errorMessage = '';
+  videoConsoleForm: FormGroup;
+  videoConsole: VideoConsoleModel | null;
+  sub: Subscription;
+
+  displayMessage: { [key: string]: string } = {};
+  private validationMessages: { [key: string]: { [key: string]: string } };
+  private genericValidator: GenericValidator;
+
+  constructor(
+    private fb: FormBuilder,
+    private videoConsoleService: VideoConsoleService
+  ) {
+    this.validationMessages = {
+      videoConsoleName: {
+        required: 'Name is required',
+        minLength: 'Three or more characters',
+        maxLength: 'No bigger than fifty characters',
+      },
+      videoConsoleCode: {
+        required: 'Code is required',
+      },
+      rating: {
+        range: 'Rate between 1 and 5'
+      }
+    };
+
+    this.genericValidator = new GenericValidator(this.validationMessages);
+  }
+
+  ngOnInit(): void {
+    this.videoConsoleForm = this.fb.group({
+      videoConsoleName: ['', [Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(50)]],
+      videoConsoleCode: ['', Validators.required],
+      rating: ['', NumberValidators.range(1, 5)],
+      description: ''
+    });
+
+    this.sub = this.videoConsoleService.selectedVideoConsoleChanges$
+      .subscribe(
+        (selectedVideoConsole) => this.displayVideoConsole(selectedVideoConsole)
+      );
+
+    this.videoConsoleForm.valueChanges
+        .subscribe(
+          (value) => this.displayMessage = this.genericValidator.processMessages(this.videoConsoleForm)
+        );
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  blur(): void {
+    this.displayMessage = this.genericValidator.processMessages(this.videoConsoleForm);
+  }
+
+  displayVideoConsole(videoConsole: VideoConsoleModel | null): void {
+    this.videoConsole = videoConsole;
+    if (this.videoConsole) {
+      this.videoConsoleForm.reset();
+      this.videoConsoleForm.patchValue({
+        videoConsoleName: this.videoConsole.name,
+        videoConsoleCode: this.videoConsole.code,
+        rating: this.videoConsole.rating,
+        description: this.videoConsole.description,
+      })
+    }
+  }
+
+  cancelEdit(): void {
+    this.displayVideoConsole(this.videoConsole);
+  }
+
+  deleteVideoCosole(): void {
+    if (this.videoConsole && this.videoConsole.id) {
+      this.videoConsoleService.deleteVideConsole(this.videoConsole.id)
+        .subscribe(
+          () => this.videoConsoleService.changeSelectedVideoConsole(null),
+          (err: any) => this.errorMessage = err.error
+        )
+    } else {
+      this.videoConsoleService.changeSelectedVideoConsole(null);
+    }
+  }
+
+  saveVideoConsole(): void {
+    if (this.videoConsoleForm.valid && this.videoConsoleForm.dirty) {
+      const vc = this.map(this.videoConsoleForm.value, this.videoConsole.id);
+
+      if (vc.id === 0) {
+        this.videoConsoleService.createVideoConsole(vc)
+          .subscribe(
+            (vc) => this.videoConsoleService.changeSelectedVideoConsole(vc),
+            (err: any) => this.errorMessage = err.error,
+          );
+      } else {
+        this.videoConsoleService.updateVideoConsole(vc)
+          .subscribe(
+            (vc) => this.videoConsoleService.changeSelectedVideoConsole(vc),
+            (err: any) => this.errorMessage = err.error,
+          );
+      }
+    } else {
+      this.errorMessage = 'Please correct the validation errors'
+    }
+  }
+
+  private map = (formValues: any, id: number): VideoConsoleModel => ({
+    id: id,
+    name: formValues.videoConsoleName,
+    code: formValues.videoConsoleCode,
+    rating: formValues.rating,
+    description: formValues.description,
+  });
+}
 
 ```
+
+
+### Step 6. Create `video-console-list.component`
+
+```bash
+$ ng g c video-consoles/video-console-list --module=video-consoles --spec false
+```
+
+```html
+<div class="card">
+  <div class="card-body" *ngIf="videoConsoles?.length">
+    <div class="list-group">
+      <button class="list-group-item list-group-item-action rounded-0"
+          *ngFor="let videoConsole of videoConsoles"
+          [ngClass]="{'active': videoConsole?.id === selectedVideoConsole?.id}"
+          (click)="videoConsoleSelected(videoConsole)">{{ videoConsole.name }}
+        <ng-container *ngIf="displayCode">
+          ({{ videoConsole.code }})
+        </ng-container>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="row">
+      <div class="form-check col-md-7">
+        <label>
+          <input class="form-check-input"
+                 type="checkbox"
+                 (change)="checkChanged($event.target.checked)"
+                 [checked]="displayCode">
+          Display Video Console Code
+        </label>
+      </div>
+      <div class="col-md-4 text-right">
+        <button class="btn btn-primary" (click)="newVideoConsole()">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger">
+  Error: {{ errorMessage }}
+</div>
+
+```
+
+```typescript
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { VideoConsoleModel } from '../video-console.model';
+
+import { Subscription } from 'rxjs';
+import { VideoConsoleService } from '../video-console.service';
+
+@Component({
+  selector: 'app-video-console-list',
+  templateUrl: './video-console-list.component.html',
+  styleUrls: ['./video-console-list.component.css']
+})
+export class VideoConsoleListComponent implements OnInit, OnDestroy {
+  errorMessage: string;
+  displayCode: boolean;
+  videoConsoles: VideoConsoleModel[];
+  selectedVideoConsole: VideoConsoleModel | null;
+  sub: Subscription;
+
+  constructor(private videoConsoleService: VideoConsoleService) { }
+
+  ngOnInit(): void {
+    this.sub = this.videoConsoleService.selectedVideoConsoleChanges$.subscribe(
+      selectedVideoConsole => this.selectedVideoConsole = selectedVideoConsole
+    );
+
+    this.videoConsoleService.getVideoConsoles().subscribe(
+      (videoConsoles: VideoConsoleModel[]) => this.videoConsoles = videoConsoles,
+      (err: any) => this.errorMessage = err.error
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  checkChanged(value: boolean): void {
+    this.displayCode = value;
+  }
+
+  newVideoConsole(): void {
+    this.videoConsoleService.changeSelectedVideoConsole(this.videoConsoleService.newVideoConsole());
+  }
+
+  videoConsoleSelected(videoConsole: VideoConsoleModel) : void {
+    this.videoConsoleService.changeSelectedVideoConsole(videoConsole);
+  }
+}
+
+```
+
+### Step 7. Create video-console-board.component
+
+```bash
+$ ng g c video-consoles/video-console-board --module=video-consoles --spec false
+```
+
+```html
+<div class="row">
+  <div class="col-4">
+    <app-video-console-list></app-video-console-list>
+  </div>
+  <div class="col-8">
+    <app-video-console-edit></app-video-console-edit>
+  </div>
+</div>
+
+```
+* No need to modify typescript ccomponent code.
+
+### Step 8. Create roues for module.
+
+```diff vide-consoles.module
+import { NgModule } from '@angular/core';
++import { RouterModule, Routes } from '@angular/router';
+
+import { SharedModule } from '../shared/shared.module';
+
+
+import { VideoConsoleService } from './video-console.service';
+import { VideoConsoleEditComponent } from './video-console-edit/video-console-edit.component';
+import { VideoConsoleListComponent } from './video-console-list/video-console-list.component';
+import { VideoConsoleBoardComponent } from './video-console-board/video-console-board.component';
+
++const routes: Routes = [
++  { path: '', component: VideoConsoleBoardComponent }
++];
+
+@NgModule({
+  imports: [
+    SharedModule,
++   RouterModule.forChild(routes)
+  ],
+  declarations: [VideoConsoleEditComponent, VideoConsoleListComponent, VideoConsoleBoardComponent],
+  providers: [
+    VideoConsoleService
+  ]
+})
+export class VideoConsolesModule { }
+
+```
+
+### Step 9. Before we go ahead we have to refactor as well our mocked data services. We have to remove `game-data` and create `app-data`.
+
+* Create `app/app-data.ts`
+
+```typescript
+import { InMemoryDbService } from 'angular-in-memory-web-api';
+
+import { IGame } from './games/game.model';
+import { VideoConsoleModel } from './video-consoles/video-console.model';
+
+export class AppData implements InMemoryDbService {
+  createDb() {
+    const games: IGame[] = [
+      {
+        'id': 234,
+        'name': 'Super Mario Bros',
+        'code': 'PLA-0',
+        'release': '13 September 1985',
+        'description': 'Platform game for all family',
+        'price': 99.99,
+        'category': 'platforms',
+        'rating': 4.3,
+        'imageUrl': 'https://vignette.wikia.nocookie.net/videojuego/images/e/e2/Super_Mario_Bros..jpg/revision/latest?cb=20080402052328'
+      },
+      {
+        'id': 24,
+        'name': 'Legend of Zelda',
+        'code': 'QU-0',
+        'release': '21 February 1986',
+        'description': 'Adventure game for all family',
+        'price': 89.79,
+        'category': 'quest',
+        'rating': 4.7,
+        'imageUrl': 'http://omegacenter.es/blog/wp-content/uploads/2015/12/zelda12.png'
+      },
+      {
+        'id': 44,
+        'name': 'Sonic',
+        'code': 'PLA-1',
+        'release': '23 June 1991',
+        'description': 'Speed and fun',
+        'price': 96.67,
+        'category': 'platforms',
+        'rating': 4.7,
+        'imageUrl': 'https://cdn.arstechnica.net/wp-content/uploads/2018/07/sonicmaniaplus-logo.jpg'
+      },
+    ];
+
+    const videoconsoles: VideoConsoleModel[] = [
+      {
+        name: 'Nintendo Entertaiment System',
+        code: 'NES-0',
+        description: 'One of the most retro video console ever',
+        id: 1,
+        rating: 3,
+      },
+      {
+        name: 'Atari',
+        code: 'A-2',
+        description: 'Atari forever',
+        id: 2,
+        rating: 1,
+      },
+      {
+        name: 'Mega Drive',
+        code: 'MD',
+        description: 'The first 16 bit console?',
+        id: 3,
+        rating: 4,
+      },
+    ];
+    return {
+      games,
+      videoconsoles
+    };
+  }
+}
+
+```
+
+* Remove `app/games/game-data`
+
+### Step 10. Update app.module.ts
+
+```diff
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AppRoutingModule } from './app-routing.module';
+
+// Imports for in-memory web-api
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+-import { GameData } from './games/game-data';
++import { AppData } from './app-data';
+
+import { AppComponent } from './app.component';
+import { MenuComponent } from './home/menu.component';
+import { WelcomeComponent } from './home/welcome.component';
+import { ShellComponent } from './home/shell.component';
+import { PageNotFoundComponent } from './home/page-not-found.component';
+
+import { CoreModule } from './core/core.module';
+
+/* Feature Modules */
+import { UserModule } from './user/user.module';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    MenuComponent,
+    WelcomeComponent,
+    ShellComponent,
+    PageNotFoundComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+-   HttpClientInMemoryWebApiModule.forRoot(GameData),
++   HttpClientInMemoryWebApiModule.forRoot(AppData),
+    CoreModule,
+    UserModule,
+    AppRoutingModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+### Step 11. We have to modify `app-routing.module.ts`
+
+```diff
+@NgModule({
+  imports: [
+    RouterModule.forRoot([
+      {
+        path: '',
+        component: ShellComponent,
+        children: [
+          { path: 'welcome', component: WelcomeComponent },
+          { path: 'games', loadChildren: './games/games.module#GamesModule' },
++         { path: 'videoconsoles', loadChildren: './video-consoles/video-consoles.module#VideoConsolesModule' },
+          { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+        ]
+      },
+      { path: '**', component: PageNotFoundComponent }
+    ])
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+### Step 12. For last lets create an entry to navigate to this new route.
