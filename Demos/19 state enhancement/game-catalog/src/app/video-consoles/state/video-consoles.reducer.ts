@@ -11,8 +11,14 @@ export interface VideoConsoleState {
   videoconsoles: VideoConsoleModel[];
 }
 
-// export const reducer = (state, action) => {
-export const reducer = (state: VideoConsoleState, action): VideoConsoleState => {
+const initialState: VideoConsoleState = {
+  showVideoConsoleCode: true,
+  currentVideoConsole: null,
+  videoconsoles: [],
+}
+
+// export const reducer = (state: VideoConsoleState, action): VideoConsoleState => {
+export const reducer = (state: VideoConsoleState = initialState, action): VideoConsoleState => {
   switch (action.type) {
     case 'TOGGLE_VIDEO_CONSOLE_CODE':
       console.log(`existing state: ${JSON.stringify(state)}`);

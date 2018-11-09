@@ -41,9 +41,10 @@ export class VideoConsoleListComponent implements OnInit, OnDestroy {
       select('videoconsoles')
     ).subscribe(
       (vcs) => {
-        if (vcs) {
-          this.displayCode = vcs.showVideoConsoleCode;
-        }
+        // if (vcs) {
+        //   this.displayCode = vcs.showVideoConsoleCode;
+        // }
+        this.displayCode = vcs.showVideoConsoleCode;
       }
     );
   }
