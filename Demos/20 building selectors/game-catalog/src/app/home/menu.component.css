@@ -1,0 +1,11 @@
+.nav-full-width {
+  width: 80%;
+}
+
+.nav-end {
+  margin-left: auto;
+}
+
+.navbar-nav>li {
+  margin-right: 1rem;
+}
