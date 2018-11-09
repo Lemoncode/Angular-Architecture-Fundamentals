@@ -13,6 +13,8 @@ export class LoginComponent {
   errorMessage: string;
   pageTitle = 'Log In';
 
+  maskUserName: boolean;
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -21,6 +23,10 @@ export class LoginComponent {
 
   cancel(): void {
     this.router.navigate(['welcome']);
+  }
+
+  checkChanged(value: boolean): void {
+    this.maskUserName = value;
   }
 
   login(loginForm: NgForm): void {

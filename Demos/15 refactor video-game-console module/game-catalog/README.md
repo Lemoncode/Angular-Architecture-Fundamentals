@@ -799,3 +799,89 @@ export class AppRoutingModule { }
 ```
 
 ### Step 12. For last lets create an entry to navigate to this new route.
+
+#### src/app/home/menu.component.html
+
+```diff
+<nav class="navbar navbar-expand-sm bg-light navbar-light">
+  <ul class="navbar-nav nav-full-width">
+    <li routerLinkActive="active">
+        <a routerLink='/welcome'>Home</a>
+    </li>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink='/games'>Game List</a>
+    </li>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink='/games/summary'>Game Summary List</a>
+    </li>
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a [routerLink]="['/games', 0, 'edit']">Add Game</a>
+    </li>
++    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
++      <a routerLink='/videoconsoles'>Video Consoles</a>
++    </li>
+  </ul>
+  <ul class="navbar-nav nav-end">
+      <li *ngIf="isLoggedIn">
+          <a routerLink='/login'>Welcome {{ userName }}</a>
+      </li>
+      <li *ngIf="!isLoggedIn">
+          <a routerLink='/login'>Log In</a>
+      </li>
+      <li *ngIf="isLoggedIn">
+          <a (click)="logOut()" style="cursor: pointer">Log Out</a>
+      </li>
+  </ul>
+</nav>
+
+```
+
+### Step 13. Now we are going to add a little change into `src/app/user/login.component`
+
+```diff login.component.html
+<input class="form-control"
+          id="userNameId"
+-         type="text"
++         [type]="maaskUserName ? 'password' : 'text'"
+          placeholder="User Name (required)"
+          required
+          ngModel
+          name="userName"
+          #userNameVar="ngModel" />
+```
+
+```diff login.component.html
+</form>
++ <div class="row">
++   <div class="form-check col-7">
++     <label>
++       <input class="form-check-input"
++              type="checkbox"
++              (change)="checkChanged($event.target.checked)"
++              [checked]="maskUserName">
++       Mask user name
++     </label>
++   </div>
++ </div>
+  <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+```
+
+```diff login.component.ts
+....
++ maskUserName: boolean;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {
+  }
+
+  cancel(): void {
+    this.router.navigate(['welcome']);
+  }
++
++ checkChanged(value: boolean): void {
++   this.maskUserName = value;
++ }
+  ....
+```

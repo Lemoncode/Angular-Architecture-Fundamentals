@@ -10,8 +10,14 @@
         <label class="col-md-2 control-label" for="userNameId">User Name</label>
 
         <div class="col-md-8">
-          <input class="form-control" id="userNameId" type="text" placeholder="User Name (required)" required ngModel
-            name="userName" #userNameVar="ngModel" />
+          <input class="form-control"
+          id="userNameId"
+          [type]="maaskUserName ? 'password' : 'text'"
+          placeholder="User Name (required)"
+          required
+          ngModel
+          name="userName"
+          #userNameVar="ngModel" />
           <span class="help-block" *ngIf="(userNameVar.touched ||
                                                userNameVar.dirty) &&
                                                userNameVar.errors">
@@ -56,5 +62,17 @@
       </div>
     </fieldset>
   </form>
+  <div class="row">
+    <div class="form-check col-7">
+      <label>
+        <input class="form-check-input"
+               type="checkbox"
+               (change)="checkChanged($event.target.checked)"
+               [checked]="maskUserName">
+        Mask user name
+      </label>
+    </div>
+  </div>
   <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+
 </div>
