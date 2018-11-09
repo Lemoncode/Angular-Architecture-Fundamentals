@@ -9,6 +9,10 @@ import { VideoConsoleEditComponent } from './video-console-edit/video-console-ed
 import { VideoConsoleListComponent } from './video-console-list/video-console-list.component';
 import { VideoConsoleBoardComponent } from './video-console-board/video-console-board.component';
 
+/*NgRx*/
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './state/video-consoles.reducer';
+
 const routes: Routes = [
   { path: '', component: VideoConsoleBoardComponent }
 ];
@@ -16,9 +20,14 @@ const routes: Routes = [
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    StoreModule.forFeature('videoconsoles', reducer),
   ],
-  declarations: [VideoConsoleEditComponent, VideoConsoleListComponent, VideoConsoleBoardComponent],
+  declarations: [
+    VideoConsoleEditComponent,
+    VideoConsoleListComponent,
+    VideoConsoleBoardComponent
+  ],
   providers: [
     VideoConsoleService
   ]

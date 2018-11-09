@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 
 // Imports for in-memory web-api
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-// import { GameData } from './games/game-data';
 import { AppData } from './app-data';
 
 import { AppComponent } from './app.component';
@@ -20,6 +19,9 @@ import { CoreModule } from './core/core.module';
 /* Feature Modules */
 import { UserModule } from './user/user.module';
 
+/*NgRx*/
+import { StoreModule } from '@ngrx/store';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,8 +33,8 @@ import { UserModule } from './user/user.module';
   imports: [
     BrowserModule,
     HttpClientModule,
-    // HttpClientInMemoryWebApiModule.forRoot(GameData),
     HttpClientInMemoryWebApiModule.forRoot(AppData),
+    StoreModule.forRoot({}),
     CoreModule,
     UserModule,
     AppRoutingModule
