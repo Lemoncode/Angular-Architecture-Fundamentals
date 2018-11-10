@@ -1,0 +1,15 @@
+<div class='row' *ngIf='monthCount'>
+  <div class='col-4'>
+      <h4>
+          Number of months on the market: {{ monthCount }}
+      </h4>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-4'>
+      <app-game-summary-list></app-game-summary-list>
+  </div>
+  <div class='col-8'>
+      <app-game-summary-detail></app-game-summary-detail>
+  </div>
+</div>
