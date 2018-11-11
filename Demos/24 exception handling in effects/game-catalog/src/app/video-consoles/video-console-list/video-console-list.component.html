@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-body" *ngIf="videoConsoles$ | async as videoConsoles">
+    <div class="list-group">
+      <button class="list-group-item list-group-item-action rounded-0"
+          *ngFor="let videoConsole of videoConsoles"
+          [ngClass]="{'active': videoConsole?.id === selectedVideoConsole?.id}"
+          (click)="videoConsoleSelected(videoConsole)">{{ videoConsole.name }}
+        <ng-container *ngIf="displayCode">
+          ({{ videoConsole.code }})
+        </ng-container>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <div class="row">
+      <div class="form-check col-md-7">
+        <label>
+          <input class="form-check-input"
+                 type="checkbox"
+                 (change)="checkChanged($event.target.checked)"
+                 [checked]="displayCode">
+          Display Video Console Code
+        </label>
+      </div>
+      <div class="col-md-4 text-right">
+        <button class="btn btn-primary" (click)="newVideoConsole()">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="errorMessage$ | async as errorMessage" class="alert alert-danger">
+  Error: {{ errorMessage }}
+</div>
