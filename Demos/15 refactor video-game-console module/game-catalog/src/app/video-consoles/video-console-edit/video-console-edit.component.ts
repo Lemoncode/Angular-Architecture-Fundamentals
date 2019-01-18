@@ -92,7 +92,7 @@ export class VideoConsoleEditComponent implements OnInit, OnDestroy {
     this.displayVideoConsole(this.videoConsole);
   }
 
-  deleteVideoCosole(): void {
+  deleteVideoConsole(): void {
     if (this.videoConsole && this.videoConsole.id) {
       this.videoConsoleService.deleteVideConsole(this.videoConsole.id)
         .subscribe(

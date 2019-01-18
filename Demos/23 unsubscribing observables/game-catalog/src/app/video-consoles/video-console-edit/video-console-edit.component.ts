@@ -3,16 +3,17 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { VideoConsoleModel } from '../video-console.model';
 
-import { Subscription } from 'rxjs';
+// import { Subscription } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 import { GenericValidator } from '../../shared/generic-validator';
 import { NumberValidators } from '../../shared/number.validator';
 import { VideoConsoleService } from '../video-console.service';
 
-/*NgRx*/
+/*ngrx*/
 import { Store, select } from '@ngrx/store';
 import * as fromVideoConsole from '../state/video-consoles.reducer';
-import * as videoConsoleActions from '../state/video-consoles.actions';
+import * as videoConsoleActions from '../state/video-console.actions';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class VideoConsoleEditComponent implements OnInit, OnDestroy {
   errorMessage = '';
   videoConsoleForm: FormGroup;
   videoConsole: VideoConsoleModel | null;
-  sub: Subscription;
+  // sub: Subscription;
+  componentActive = true;
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -62,14 +64,12 @@ export class VideoConsoleEditComponent implements OnInit, OnDestroy {
       description: ''
     });
 
-    // this.sub = this.videoConsoleService.selectedVideoConsoleChanges$
-    //   .subscribe(
-    //     (selectedVideoConsole) => this.displayVideoConsole(selectedVideoConsole)
-    //   );
-    this.store.pipe(select(fromVideoConsole.getCurrentVideoConsole))
-      .subscribe(
-        currentVideoConsole => this.displayVideoConsole(currentVideoConsole)
-      );
+    this.store.pipe(
+      select(fromVideoConsole.getCurrentVideoConsole),
+      takeWhile(() => this.componentActive),
+    ).subscribe(
+      cvc => this.displayVideoConsole(cvc)
+    );
 
     this.videoConsoleForm.valueChanges
         .subscribe(
@@ -78,7 +78,8 @@ export class VideoConsoleEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    // this.sub.unsubscribe();
+    this.componentActive = false;
   }
 
   blur(): void {
@@ -106,7 +107,6 @@ export class VideoConsoleEditComponent implements OnInit, OnDestroy {
     if (this.videoConsole && this.videoConsole.id) {
       this.videoConsoleService.deleteVideConsole(this.videoConsole.id)
         .subscribe(
-          // () => this.videoConsoleService.changeSelectedVideoConsole(null),
           () => this.store.dispatch(new videoConsoleActions.ClearCurrentVideoConsole()),
           (err: any) => this.errorMessage = err.error
         )
@@ -122,14 +122,12 @@ export class VideoConsoleEditComponent implements OnInit, OnDestroy {
       if (vc.id === 0) {
         this.videoConsoleService.createVideoConsole(vc)
           .subscribe(
-            // (vc) => this.videoConsoleService.changeSelectedVideoConsole(vc),
             (vc) => this.store.dispatch(new videoConsoleActions.SetCurrentVideoConsole(vc)),
             (err: any) => this.errorMessage = err.error,
           );
       } else {
         this.videoConsoleService.updateVideoConsole(vc)
           .subscribe(
-            // (vc) => this.videoConsoleService.changeSelectedVideoConsole(vc),
             (vc) => this.store.dispatch(new videoConsoleActions.SetCurrentVideoConsole(vc)),
             (err: any) => this.errorMessage = err.error,
           );

@@ -17,7 +17,7 @@
 
 ### Step 1. The first thing that we have to ask ourselelves is where we place the actions. Lets create a new file inside the video-consoles/state folder and name it video-consoles.actions.ts
 
-```typescript video-console.actions.ts
+```typescript video-consoles.actions.ts
 import { Action } from '@ngrx/store';
 
 export enum VideoConsoleActionTypes {
@@ -165,7 +165,7 @@ export const reducer = (state: VideoConsoleState = initialState, action): VideoC
 
 ```diff video-console-list.component.ts
 ...
-+import * as videoConsoleActions from '../state/video-consoles.actions';
++import * as videoConsolesActions from '../state/video-consoles.actions';
 
 @Component({
   selector: 'app-video-console-list',
@@ -179,7 +179,7 @@ export class VideoConsoleListComponent implements OnInit, OnDestroy {
 -     type: 'TOGGLE_VIDEO_CONSOLE_CODE',
 -     payload: value,
 -   });
-+   this.store.dispatch(new videoConsoleActions.ToggleVideoConsoleCode(value));
++   this.store.dispatch(new videoConsolesActions.ToggleVideoConsoleCode(value));
   }
 ...
 }

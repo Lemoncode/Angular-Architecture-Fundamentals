@@ -6,7 +6,7 @@
 ```diff video-console-list.component.ts
 -import { Component } from '@angular/core';
 +import { Component, Input } from '@angular/core';
-import { VideoConsoleModel } from '../video-console.model';
++import { VideoConsoleModel } from '../../video-console.model';
 
 @Component({
   selector: 'app-video-console-list',

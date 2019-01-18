@@ -35,10 +35,10 @@ export class VideoConsoleListComponent {
 ```typescript video-console-board.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { VideoConsoleModel } from '../video-console.model';
+import { VideoConsoleModel } from '../../video-console.model';
 import { Store, select } from '@ngrx/store';
-import * as fromVideoConsole from '../state/video-consoles.reducer';
-import * as videoConsoleActions from '../state/video-consoles.actions';
+import * as fromVideoConsole from '../../state/video-consoles.reducer';
+import * as videoConsoleActions from '../../state/video-consoles.actions';
 
 
 @Component({

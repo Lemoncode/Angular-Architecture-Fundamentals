@@ -18,7 +18,7 @@ this.store.pipe(
 ### Selectors
 
 * Is a reusable query of our store.
-* Selectors allow us to keep one copy of the state in the store, but project it into different shapes, making it easier to access by our components and services. Our components use the selector to select statefrom our store, adding a level of abstraction between our stores structure and our components.
+* Selectors allow us to keep one copy of the state in the store, but project it into different shapes, making it easier to access by our components and services. Our components use the selector to select state from our store, adding a level of abstraction between our stores structure and our components.
 
 ### Selectors benefits
 

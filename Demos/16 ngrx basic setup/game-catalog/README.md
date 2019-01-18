@@ -64,7 +64,7 @@ import { StoreModule } from '@ngrx/store'
     SharedModule,
     RouterModule.forChild(productRoutes),
     ...
-    StoreModule.forFeature('products', reducer)
+    StoreModule.forFeature('videoconsoles', reducer)
   ]
   declarations: [...],
   providers: [...]

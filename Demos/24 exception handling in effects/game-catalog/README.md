@@ -1,4 +1,4 @@
-## In this demo we are going to hnadle exceptions.
+## In this demo we are going to handle exceptions.
 
 ### Step 1. First we need to handle the error inside the effects.
 
@@ -29,13 +29,15 @@ export class VideoConsoleEffects {
       this.videoConsoleService.getVideoConsoles()
         .pipe(
           map((vcs: VideoConsoleModel[]) => (new videoConsoleActions.LoadSuccess(vcs))),
-+         catchError(err => of(new videoConsoleActions.LoadFailed(err)))
++         catchError(err => of(new videoConsoleActions.LoadFailed(err))) // [1]
         )
     )
   )
 }
 
 ```
+
+1. `of`: Emit variable amount of values in a sequence and then emits a complete notification.
 
 ### Step 2. Now we can update our `video-console.reducer.ts`
 

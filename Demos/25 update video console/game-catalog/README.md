@@ -36,10 +36,10 @@ export const getShowVideoConsoleCode = createSelector(
   state => state.showVideoConsoleCode,
 );
 
-export const getCurrentVideoConsoleId = createSelector(
-  getVideoConsoleFeatureState,
-  state => state.currentVideoConsoleId
-);
++export const getCurrentVideoConsoleId = createSelector(
++  getVideoConsolesFeatureState,
++  state => state.currentVideoConsoleId
++);
 
 - export const getCurrentVideoConsole = createSelector(
 -   getVideoConsoleFeatureState,
