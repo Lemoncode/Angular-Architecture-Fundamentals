@@ -122,7 +122,7 @@ export class AuthGuardService implements CanActivate {
 ### Step 4. Now we can build the login component.
 
 ```bash
-$ ng g c user/login --flat --module=user.module.ts --spec false 
+$ ng g c user/login --flat --module=user --spec false 
 ```
 
 ```html login.component.html

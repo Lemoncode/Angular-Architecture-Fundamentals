@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, of, BehaviorSubject } from 'rxjs';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import { tap, map, catchError } from 'rxjs/operators'
 
 import { IGame } from './game.model';
@@ -13,6 +13,7 @@ export class GameService {
   private gamesUrl = 'api/games';
   private games: IGame[];
   private selectedGameSource = new BehaviorSubject<IGame | null>(null);
+  // private selectedGameSource = new Subject<IGame | null>();
   selectedGameChange$ = this.selectedGameSource.asObservable();
 
   constructor(

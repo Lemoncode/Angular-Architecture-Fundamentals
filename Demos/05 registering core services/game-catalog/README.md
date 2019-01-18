@@ -45,7 +45,7 @@ export const logJSON = (data) => console.log(JSON.stringify(data));
 
 ```
 
-### Step 2. Now we are gong to register into core module providers.
+### Step 2. Now we are going to register into core module providers.
 
 ```typescript core.module.ts
 import {

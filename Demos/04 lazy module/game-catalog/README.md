@@ -49,7 +49,7 @@ export interface IGame {
   release: string;
   price: number;
   description: string;
-  raiting: number;
+  rating: number;
   imageUrl: string;
 }
 

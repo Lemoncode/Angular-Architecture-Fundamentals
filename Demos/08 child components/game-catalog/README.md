@@ -34,7 +34,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### Step 1. Let's build a child component so we have something to communicate with.
 
 ```bash 
-ng g c shared/criteria --module=shared
+ng g c shared/criteria --module=shared --spec false
 ```
 ```diff shared.module.ts
 import { NgModule } from '@angular/core';

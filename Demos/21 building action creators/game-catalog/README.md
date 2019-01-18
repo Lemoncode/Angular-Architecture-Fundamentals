@@ -186,7 +186,7 @@ export class VideoConsoleListComponent implements OnInit, OnDestroy {
 
 ```
 
-### Step 5. Now that we have this infraestructure set up, we cna start communicate components using actions and selectors. Lets start by changing the selected video console.
+### Step 5. Now that we have this infraestructure set up, we can start communicate components using actions and selectors. Lets start by changing the selected video console.
 
 ```diff video-console-list.component.ts
 videoConsoleSelected(videoConsole: VideoConsoleModel): void {

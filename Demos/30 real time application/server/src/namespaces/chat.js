@@ -24,12 +24,14 @@ module.exports = (messages, io) => {
         getMessages()
             .then((messages) => {
                 setTimeout(() => {
+                    console.log(messages)
                     chat.emit('messages', messages);
                 }, 1000);
             });
     });
     
     messages.events.on('messagecreated', (data) => {
+        console.log(data);
         chat.emit('message', data);
     });
 };

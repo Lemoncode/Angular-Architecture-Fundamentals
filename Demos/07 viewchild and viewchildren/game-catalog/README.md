@@ -227,7 +227,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // console.log(this.filterElementRef);
     this.filterElementRef.nativeElement.focus();
-    console.log(this.inputElementRefs);
++   console.log(this.inputElementRefs);
   }
 ...
 

@@ -14,6 +14,7 @@ exports.create = (socketId) => (id, author, body) => (
         resolve(messages[id]);
     })
 ).then((newMessage) => {
+    console.log(messages);
     exports.events.messageCreated({
         id: newMessage.id,
         author: newMessage.author,

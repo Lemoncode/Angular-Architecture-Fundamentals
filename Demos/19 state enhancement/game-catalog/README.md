@@ -39,8 +39,8 @@ export interface State {
 }
 
 ```
-* We have a issue with this code, product module is lazy loaded, that means that we have bundle boundaries that we can't cross and with this statement we have crossed those bounderies:
-  - `import { ProductState } from '../products/state/product.reducer';`
+* We have a issue with this code, VideoConsole module is lazy loaded, that means that we have bundle boundaries that we can't cross and with this statement we have crossed those bounderies:
+  - `import { VideoConsoleState } from '../VideoConsoles/state/VideoConsole.reducer';`
 
 * We have to follow another strategy,:
 
@@ -61,7 +61,7 @@ export interface State extends fromRoot.State {
 }
 ```
 
-* Instead extend State from products module, this way will not cross bundle bounderies.
+* Instead extend State from VideoConsoles module, this way will not cross bundle bounderies.
 
 ### Step 3. Lets refactor our code to align with this.
 

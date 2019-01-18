@@ -3,6 +3,7 @@ import { NgModel } from '@angular/forms';
 
 import { IGame } from '../game.model';
 import { GameService } from '../game.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-game-list',
@@ -39,7 +40,11 @@ export class GameListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.filterElementRef.nativeElement.focus();
     // console.log(this.inputElementRefs);
-    this.filterInput.valueChanges.subscribe(
+    this.filterInput.valueChanges
+    .pipe(
+      tap((val) => console.log(val))
+    )
+    .subscribe(
       () => {
         console.log(this.listFilter);
         this.performFilter(this.listFilter);
