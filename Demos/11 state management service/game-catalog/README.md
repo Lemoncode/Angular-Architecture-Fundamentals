@@ -102,7 +102,7 @@ import { HTTP_DATA_LOGGER } from '../core/http-data-logger.service';
 @Injectable()
 export class GameService {
   private gamesUrl = 'api/games';
-  private games: IGame[];
++ private games: IGame[];
 
   constructor(
     private http: HttpClient,
@@ -110,9 +110,9 @@ export class GameService {
   ) { }
 
   getGames(): Observable<IGame[]> {
-    if (this.games) {
-      return of(this.games);
-    }
++   if (this.games) {
++     return of(this.games);
++   }
     return this.http.get<IGame[]>(this.gamesUrl)
       .pipe(
         tap(this.logger.logJSON),

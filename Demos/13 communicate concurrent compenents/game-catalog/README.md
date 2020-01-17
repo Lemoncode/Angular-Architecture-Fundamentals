@@ -157,7 +157,7 @@ export class GameSummaryDetailComponent implements OnInit {
  import { Component, OnInit } from '@angular/core';
 import { IGame } from '../game.model';
 import { GameService } from '../game.service';
-import { timer } from 'rxjs';
++import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-game-summary-detail',

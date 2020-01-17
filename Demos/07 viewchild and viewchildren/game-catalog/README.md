@@ -169,7 +169,6 @@ export class GameListComponent implements OnInit, AfterViewInit {
 ### Step 5. Now lets have a look into `ViewChildren` 
 
 ```diff game-list.component.html
-```diff product-list.component.html
 <!-- Filter by the Title   -->
 <div class='row'>
     <div class='col-md-2'>Filter by:</div>
@@ -187,9 +186,9 @@ export class GameListComponent implements OnInit, AfterViewInit {
 ```
 
 ```diff game-list.component.ts
--import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
-+import { NgModel } from '@angular/forms';
-
+-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
++import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { IGame } from '../game.model';
 import { GameService } from '../game.service';
 

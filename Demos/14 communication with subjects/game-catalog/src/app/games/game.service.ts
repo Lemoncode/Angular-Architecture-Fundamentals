@@ -23,6 +23,7 @@ export class GameService {
   ) { }
 
   changeSelectedGame(selectedGame: IGame | null) : void {
+    debugger;
     this.selectedGameSource.next(selectedGame);
    }
 

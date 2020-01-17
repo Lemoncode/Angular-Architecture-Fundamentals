@@ -135,7 +135,7 @@ set listFilter(value: string): string {
 ```typescript
 set listFilter(value: string) {
   this._listFilter = value;
-  this.performFilter(this.listFilter);
+  this.performFilter(value);
 }
 ```
 

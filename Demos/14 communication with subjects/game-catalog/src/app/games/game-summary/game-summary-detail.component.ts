@@ -18,7 +18,10 @@ export class GameSummaryDetailComponent implements OnInit, OnDestroy {
     // this.gameService.selectedGameChange$
     //   .subscribe((selectedGame) => this.game = selectedGame);
     this.sub = this.gameService.selectedGameChange$
-    .subscribe((selectedGame) => this.game = selectedGame);
+    .subscribe((selectedGame) => {
+      debugger;
+      this.game = selectedGame
+    });
   }
 
   ngOnDestroy(): void {

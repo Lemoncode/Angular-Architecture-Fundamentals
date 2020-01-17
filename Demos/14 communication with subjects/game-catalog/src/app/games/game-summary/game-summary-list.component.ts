@@ -25,6 +25,7 @@ export class GameSummaryListComponent implements OnInit {
   }
 
   onSelected(game: IGame): void {
+    debugger;
     this.gameService.changeSelectedGame(game);
   }
 

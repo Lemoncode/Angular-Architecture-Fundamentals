@@ -2,8 +2,6 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
-// import { tap } from 'rxjs/operators'
-// import { tap, map } from 'rxjs/operators'
 import { tap, map, catchError } from 'rxjs/operators'
 
 import { IGame } from './game.model';
