@@ -22,6 +22,7 @@ import { UserModule } from './user/user.module';
 /*NgRx*/
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 import { environment } from '../environments/environment';
 
@@ -38,6 +39,7 @@ import { environment } from '../environments/environment';
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(AppData),
     StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       name: 'Game Catalog App Devtools',
       maxAge: 25,

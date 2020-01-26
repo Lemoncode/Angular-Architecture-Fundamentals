@@ -39,6 +39,11 @@ export const getVideoConsoles = createSelector(
 
 export const reducer = (state: VideoConsoleState = initialState, action): VideoConsoleState => {
   switch (action.type) {
+    case VideoConsoleActionTypes.LoadSuccess:
+      return {
+        ...state,
+        videoconsoles: [...action.payload],
+      }
     case VideoConsoleActionTypes.ToggleVideoConsoleCode:
       return {
         ...state,

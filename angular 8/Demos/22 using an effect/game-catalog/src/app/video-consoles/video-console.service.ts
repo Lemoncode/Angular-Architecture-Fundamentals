@@ -14,7 +14,7 @@ import { VideoConsoleModel } from './video-console.model';
 @Injectable()
 export class VideoConsoleService {
   private videoconsolesUrl = 'api/videoconsoles';
-  private videoConsoles: VideoConsoleModel[];
+  // private videoConsoles: VideoConsoleModel[];
 
   constructor(
     private http: HttpClient,
@@ -30,13 +30,13 @@ export class VideoConsoleService {
   }
 
   getVideoConsoles(): Observable<VideoConsoleModel[]> {
-    if (this.videoConsoles) {
-      return of(this.videoConsoles);
-    }
+    // if (this.videoConsoles) {
+    //   return of(this.videoConsoles);
+    // }
     return this.http.get<VideoConsoleModel[]>(this.videoconsolesUrl)
       .pipe(
         tap(this.logger.logJSON),
-        tap(data => this.videoConsoles = data),
+        // tap(data => this.videoConsoles = data),
         catchError(this.errorHandler.handleError),
       )
   }
@@ -58,9 +58,9 @@ export class VideoConsoleService {
       { headers }
     ).pipe(
       tap(this.logger.logJSON),
-      tap(data => {
-        this.videoConsoles.push(data);
-      }),
+      // tap(data => {
+      //   this.videoConsoles.push(data);
+      // }),
       catchError(this.errorHandler.handleError)
     );
   }
@@ -73,12 +73,12 @@ export class VideoConsoleService {
       { headers }
     ).pipe(
       tap(this.logger.logJSON),
-      tap(_ => {
-        const foundIndex = this.videoConsoles.findIndex(item => item.id === id);
-          if (foundIndex > -1) {
-            this.videoConsoles.splice(foundIndex, 1);
-          }
-      }),
+      // tap(_ => {
+      //   const foundIndex = this.videoConsoles.findIndex(item => item.id === id);
+      //     if (foundIndex > -1) {
+      //       this.videoConsoles.splice(foundIndex, 1);
+      //     }
+      // }),
       catchError(this.errorHandler.handleError)
     )
   }
@@ -89,12 +89,12 @@ export class VideoConsoleService {
     return this.http.put<VideoConsoleModel>(url, videoConsole, { headers })
       .pipe(
         tap(this.logger.logJSON),
-        tap(() => {
-          const foundIndex = this.videoConsoles.findIndex(item => item.id === videoConsole.id);
-          if (foundIndex > -1) {
-            this.videoConsoles[foundIndex] = videoConsole;
-          }
-        }),
+        // tap(() => {
+        //   const foundIndex = this.videoConsoles.findIndex(item => item.id === videoConsole.id);
+        //   if (foundIndex > -1) {
+        //     this.videoConsoles[foundIndex] = videoConsole;
+        //   }
+        // }),
         map(() => videoConsole),
         catchError(this.errorHandler.handleError)
       );

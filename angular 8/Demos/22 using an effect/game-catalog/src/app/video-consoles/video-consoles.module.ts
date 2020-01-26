@@ -11,6 +11,8 @@ import { VideoConsoleBoardComponent } from './video-console-board/video-console-
 /*NgRx*/
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './state/video-consoles.reducer';
+import { VideoConsoleEffects } from './state/video-consoles.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 const routes: Routes = [
   { path: '', component: VideoConsoleBoardComponent }
@@ -22,6 +24,7 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes),
     StoreModule.forFeature('videoconsoles', reducer),
+    EffectsModule.forFeature([ VideoConsoleEffects ])
   ],
   providers:[
     VideoConsoleService

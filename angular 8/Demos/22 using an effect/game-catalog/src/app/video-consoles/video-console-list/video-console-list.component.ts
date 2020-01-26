@@ -28,18 +28,21 @@ export class VideoConsoleListComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit(): void {
-    // this.sub = this.videoConsoleService.selectedVideoConsoleChanges$.subscribe(
-    //   selectedVideoConsole => this.selectedVideoConsole = selectedVideoConsole
-    // );
     this.store.pipe(
       select(fromVideoConsole.getCurrentVideoConsole)
     ).subscribe(
       selectedVideoConsole => this.selectedVideoConsole = selectedVideoConsole
     )
 
-    this.videoConsoleService.getVideoConsoles().subscribe(
-      (videoConsoles: VideoConsoleModel[]) => this.videoConsoles = videoConsoles,
-      (err: any) => this.errorMessage = err.error
+    // this.videoConsoleService.getVideoConsoles().subscribe(
+    //   (videoConsoles: VideoConsoleModel[]) => this.videoConsoles = videoConsoles,
+    //   (err: any) => this.errorMessage = err.error
+    // );
+    this.store.dispatch(new videoConsolesActions.Load());
+    this.store.pipe(
+      select(fromVideoConsole.getVideoConsoles)
+    ).subscribe(
+      vcs => this.videoConsoles = vcs,
     );
 
     this.store.pipe(
@@ -58,7 +61,6 @@ export class VideoConsoleListComponent implements OnInit, OnDestroy {
   }
 
   newVideoConsole(): void {
-    //this.videoConsoleService.changeSelectedVideoConsole(this.videoConsoleService.newVideoConsole());
     this.store.dispatch(new videoConsolesActions.InitializeCurrentVideoConsole());
   }
 

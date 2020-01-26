@@ -10,10 +10,12 @@ $ npm i @ngrx/effects -S
 * In our case
 
 ```bash
-$ npm i @ngrx/effects@6.1.0 -S
+$ npm i @ngrx/effects@8.6.0 -S
 ```
 
 ### Step 2. Create `video-consoles/state/video-consoles.effects.ts`
+
+__src\app\video-consoles\state\video-consoles.effects.ts__
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -42,7 +44,7 @@ export class VideoConsoleEffects {
           map((vcs: VideoConsoleModel[]) => (new videoConsoleActions.LoadSuccess(vcs)))
         )
     )
-  )
+  );
 }
 
 ```
@@ -50,6 +52,8 @@ export class VideoConsoleEffects {
 ### Step 3. Now we have to handle this on reducer.
 
 * Just add a new case statement into switch
+
+__src\app\video-consoles\state\video-consoles.reducer.ts__
 
 ```diff video-consoles.reducer.ts
 ....
@@ -61,6 +65,8 @@ export class VideoConsoleEffects {
 ```
 
 ### Step 4. Since the videoconsoles are handle by the state, we no longer need to keep the state into the video-console.service.ts
+
+__game-catalog\src\app\video-consoles\video-console.service.ts__
 
 ```diff video-console.service.ts
 import { Injectable, Inject } from '@angular/core';
@@ -167,9 +173,11 @@ export class VideoConsoleService {
 }
 
 ```
-* We have already break `delete` and `update` operations. But will fix that later.
+* We have already break `delete` and `update` operations. But will fix those opertions later.
 
 ### Step 5. Effects have to be registered such as another service. Register effects in `app.module.ts`
+
+__src\app\app.module.ts__
 
 ```diff app.module.ts
 ....
@@ -210,6 +218,8 @@ export class AppModule { }
 
 ```
 * Register effects in `video-consoles.module.ts`
+
+__src\app\video-consoles\video-consoles.module.ts__
 
 ```diff video-consoles.module.ts
 import { NgModule } from '@angular/core';
@@ -255,6 +265,8 @@ export class VideoConsolesModule { }
 
 
 ### Step 6. Lets wire up video-console-list.component.ts to use the effects.
+
+__src\app\video-consoles\video-console-list\video-console-list.component.ts__
 
 ```diff video-console-list.component.ts
 ...
