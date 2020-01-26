@@ -72,12 +72,12 @@ project root/
 </pre>
 
 * Inside root folder create the following folders:
-  - home: These are components related with our landing page. They will load with the main app module. Because they are not going to be reuse across the app we place them in its own folder. We can discuss to move them to its module, since that they don't belong to a specific domain could be tricky.
-  - core: All the related services that we want to just inject once in the app.
-  - games: feature module
-    - shared: Notice that inside games folder, we have created shared, here we place the common resources for components in module.
-  - shared: Here we place the reusable app parts.
-  - user: feature module
+  - __home__: These are components related with our landing page. They will load with the main app module. Because they are not going to be reuse across the app we place them in its own folder. We can discuss to move them to its module, since that they don't belong to a specific domain could be tricky.
+  - __core__: All the related services that we want to just inject once in the app.
+  - __games__: feature module
+    - __shared__: Notice that inside games folder, we have created shared, here we place the common resources for components in module.
+  - __shared__: Here we place the reusable app parts.
+  - __user__: feature module
 
 * To create the folder structure we are going to use `Angular CLI`
 

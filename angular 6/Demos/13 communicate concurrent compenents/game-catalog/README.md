@@ -144,9 +144,9 @@ export class GameSummaryDetailComponent implements OnInit {
 }
 
 ```
-* When the user selects a different product from the list of products, the list component sets the currentProduct property in the service to the selected product. 
+* When the user selects a different game from the list of games, the list component sets the currentgame property in the service to the selected game. 
 
-* Angular's change detection picks up that the value was changed and reevaluates the binding. The bindings call the getter, which returns the modified currentProduct from the service, and the newly selected product's details are displayed. 
+* Angular's change detection picks up that the value was changed and reevaluates the binding. The bindings call the getter, which returns the modified currentgame from the service, and the newly selected game's details are displayed. 
 
 * All of this works because the property is bound, and change detection provides the change notifications. What if it wasn't bound? Is there a way to still get change notifications? 
 
@@ -226,30 +226,30 @@ export class GameSummaryDetailComponent implements OnInit {
 
 ## Service Notification
 
-* In the prior module, we looked at how to use a service as an intermediary to communicate the selected product from the list component to the detail component. We achieved this communication by defining a property in a service, setting that property when the user selects a product from the list, and defining a getter to get the value from the service. When the user selects a product from the list, the list component sets the currentProduct property in the service. When the detail component needs that value, it pulls it from the service. If the user selects a different product, the list component changes the property value in the service, but the component is not aware of that change until it pulls that value. Luckily for us, if the getter property is bound in the template, change detection re-evaluates the binding and calls the getter, which re-gets the value appropriately, but that is only true if the value is bound. 
+* In the prior section, we looked at how to use a service as an intermediary to communicate the selected game from the list component to the detail component. We achieved this communication by defining a property in a service, setting that property when the user selects a game from the list, and defining a getter to get the value from the service. When the user selects a game from the list, the list component sets the currentgame property in the service. When the detail component needs that value, it pulls it from the service. If the user selects a different game, the list component changes the property value in the service, but the component is not aware of that change until it pulls that value. Luckily for us, if the getter property is bound in the template, change detection re-evaluates the binding and calls the getter, which re-gets the value appropriately, but that is only true if the value is bound. 
 
 * Instead of waiting for a component to ask for new state, especially if the value is not bound, the service can broadcast a notification. This basically pushes the change to any component subscribing to those notifications. 
 
-* Let's walk through how a notification would work. Here we have our list of products. 
+* Let's walk through how a notification would work. Here we have our list of games. 
 
 * The user performs an action, such as clicking a button to select an item. The template uses event binding to catch that event and calls a method in the component. 
 
 ```html
 <button type="button"
-  *ngFor="let product of products"
-  (click)="onSelected(product)">
+  *ngFor="let game of games"
+  (click)="onSelected(game)">
 </button>
 ```
 ```typescript
-onSelected(product: IProduct) {
-  this.productService.changeSelectedProduct(product);
+onSelected(game: IGame) {
+  this.gameService.changeSelectedGame(game);
 }
 ```
 
-* Instead of setting a service property as we did in the prior module, the component calls a method in the service notifying it of the change. The service then broadcasts a notification. 
+* Instead of setting a service property as we did in the prior sectionn, the component calls a method in the service notifying it of the change. The service then broadcasts a notification. 
 
 ```typescript Service
-changeSelectedProduct(selectedProduct: IProduct) {
+changeSelectedGame(selectedgame: IGame) {
   // Broadcast the notification
 }
 ```
@@ -258,7 +258,7 @@ changeSelectedProduct(selectedProduct: IProduct) {
 ```typescript Component or Service
 // Listen for and respond to the notification
 ```
-*  So, how does the service broadcast this notification? The first technique that may come to mind is to use an EventEmitter because we basically want to emit an event. Earlier in this course, we used an EventEmitter with an Output decorator in a child component so it could send notifications to its parent. In this example, we send out a notification every time the user changes the Filter by value. But the Output decorator technique shown here only allows communication between a child and its parent.
+*  So, how does the service broadcast this notification? The first technique that may come to mind is to use an EventEmitter because we basically want to emit an event. Earlier, we used an EventEmitter with an Output decorator in a child component so it could send notifications to its parent. In this example, we send out a notification every time the user changes the Filter by value. But the Output decorator technique shown here only allows communication between a child and its parent.
 
 ```typescript Child Component
 export class CriteriaComponent {

@@ -39,6 +39,8 @@ $ npm i angular-in-memory-web-api -D
 
 * Create a game model
 
+__src\app\games\game.model.ts__
+
 ```typescript
 export interface IGame {
   id: number | null;
@@ -205,6 +207,8 @@ export class GameService {
 $ ng g c games/game-list --spec false
 ```
 
+__game-catalog\src\app\games\game-list\game-list.component.html__
+
 ```html
 <div class='panel panel-primary'>
   <!-- <div class='panel-heading'>
@@ -265,6 +269,8 @@ $ ng g c games/game-list --spec false
 </div>
 
 ```
+
+__game-catalog\src\app\games\game-list\game-list.component.ts__
 ```typescript
 import { Component, OnInit } from '@angular/core';
 import { IGame } from '../game.model';

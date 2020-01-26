@@ -36,7 +36,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ### Step 1. Since we are using `angular-in-memory-web-api`, there is no network stuff happening, this is because is using interceptors under the hood. So, to notice what is going on we are going to create a logger service.
 
-```typescript http-data-logger.service.ts
+Create __src\app\core\http-data-logger.service.ts__
+
+```typescript
 import { InjectionToken } from '@angular/core';
 
 export const HTTP_DATA_LOGGER = new InjectionToken<string>('HttpDataLogger');

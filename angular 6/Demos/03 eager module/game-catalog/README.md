@@ -28,11 +28,15 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## In this demo we are going to create a eager module. In Angular basically exists two types of feature modules the eager modules and lazy modules. The main difference between them is the way the framework is going to deal with its load. Eager modules are loaded with main module, so they are ready on app bootstrapping.
 
+> https://medium.com/@lifei.8886196/eager-loading-lazy-loading-and-pre-loading-in-angular-2-what-when-and-how-798bd107090c
+
 * We must place singleton services into core module, we can discuss if `auth.service` and `auth-guard.service` must be there instead in user modules, but since is an eager module, and will load with `app.module`, we will get just an instance of each service so it's fine to have this way.  
 
 ### Step 1. Create `user` model.
 
-```typescript user.ts
+Create __src\app\user\user.model.ts__
+
+```typescript
 export interface IUser {
   id: number;
   userName: string;
@@ -119,7 +123,56 @@ export class AuthGuardService implements CanActivate {
 
 ```
 
-### Step 4. Now we can build the login component.
+### Step 4. Update shared module
+
+* In your SharedModule's main file (eg shared.module.ts), you might also export the commonly used Angular modules (eg CommonModule from @angular/common for the *ngIf structure directive or the FormsModule from @angular/forms for the [(ngModel)] directive) so they can be easily used across your app, without importing them in every Feature Module. 
+
+* Since there are common angular functionality that will be consumed in other modules this is the right place to re export this functionality. 
+
+__src\app\shared\shared.module.ts__
+
+```diff
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
++import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  imports: [
+    CommonModule,
++   FormsModule
+  ],
+  declarations: [],
+  exports: [
++   CommonModule,
++   FormsModule
+  ]
+})
+export class SharedModule { }
+
+```
+
+### Step 5. Update user module
+
+Now we can import the shared module and bring all its export features.
+
+```diff
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { LoginComponent } from './login.component';
++import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  declarations: [LoginComponent],
+  imports: [
+    CommonModule,
++   SharedModule
+  ]
+})
+export class UserModule { }
+
+```
+
+### Step 6. Now we can build the login component.
 
 ```bash
 $ ng g c user/login --flat --module=user --spec false 
@@ -232,30 +285,8 @@ export class LoginComponent {
 }
 
 ```
-### Step 5. Now it's time to update our `shared.module`.
 
-* In your SharedModule's main file (eg shared.module.ts), you might also export the commonly used Angular modules (eg CommonModule from @angular/common for the *ngIf structure directive or the FormsModule from @angular/forms for the [(ngModel)] directive) so they can be easily used across your app, without importing them in every Feature Module. 
-
-```typescript shared.module.ts
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-@NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
-  declarations: [],
-  exports: [
-    CommonModule,
-    FormsModule
-  ]
-})
-export class SharedModule { }
-
-```
-### Step 6. Now it's time to update user.module.ts.
+### Step 7. Now it's time to create routes for user.module.ts.
 
 ```typescript user.module.ts
 import { NgModule } from '@angular/core';
@@ -265,12 +296,12 @@ import { LoginComponent } from './login.component';
 import { AuthService } from './auth.service';
 import { AuthGuardService } from './auth-guard.service';
 
-import { SharedModule } from '../shared/shared.module'; // [1]
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forChild([ // [2]
+    RouterModule.forChild([ // [1]
       { path: 'login', component: LoginComponent }
     ])
   ],
@@ -283,10 +314,10 @@ import { SharedModule } from '../shared/shared.module'; // [1]
 export class UserModule { }
 
 ```
-1. We import the shared module here, conatains CommonModule and FormsModule
-2. We are not creating a routing module, since this module has only one root seems to be an overkill.
 
-### Step 7. For last we have to update app.module.ts
+1. We are not creating a routing module, since this module has only one root seems to be an overkill.
+
+### Step 8. For last we have to update app.module.ts
 
 ```diff app.module.ts
 +import { UserModule } from './user/user.module';

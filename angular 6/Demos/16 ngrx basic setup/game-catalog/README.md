@@ -11,10 +11,10 @@
   app: {
     hideWelcome: true,
   },
-  products: {
+  videoconsoles: {
     showCode: true,
     currentVideoConsole: {...},
-    videoConsoles: [...]
+    videoConsoleList: [...]
   }
   ...
 }
