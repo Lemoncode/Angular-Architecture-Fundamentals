@@ -159,7 +159,7 @@ export const reducer = (state: VideoConsoleState = initialState, action): VideoC
 
 ### Exercise: Presentational component
 
-* Move Product Edit comoponent into the components folder
+* Move VideoConsole Edit comoponent into the components folder
 
 * Change the import file paths
 
@@ -167,6 +167,6 @@ export const reducer = (state: VideoConsoleState = initialState, action): VideoC
 
 * Pass all store state properties in as inputs
 
-* Move all dispatched actions to the Product Shell, called via emitted events
+* Move all dispatched actions to the VideoConsoleBoard, called via emitted events
 
 * Add an OnChanges life cycle hook to listen for and call the patch form method on changes.
