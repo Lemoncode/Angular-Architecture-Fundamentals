@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-4">
+    <app-video-console-list
+    [errorMessage]="errorMessage$ | async"
+    [displayCode]="displayCode$ | async"
+    [videoConsoles]="videoConsoles$ | async"
+    [selectedVideoConsoles]="selectedVideoConsole$ | async"
+    (checked)="checkChanged($event)"
+    (initializeNewVideoConsole)="newVideoConsole()"
+    (selected)="videoConsoleSelected($event)">
+    </app-video-console-list
+    >
+  </div>
+  <div class="col-8">
+    <app-video-console-edit></app-video-console-edit>
+  </div>
+</div>
