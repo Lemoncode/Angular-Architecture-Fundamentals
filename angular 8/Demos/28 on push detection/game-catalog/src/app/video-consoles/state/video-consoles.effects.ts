@@ -1,0 +1,43 @@
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+
+import { VideoConsoleService } from '../video-console.service';
+import * as videoConsoleActions from './video-consoles.actions';
+import { VideoConsoleModel } from '../video-console.model';
+
+import { mergeMap, map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+@Injectable()
+export class VideoConsoleEffects {
+  constructor(
+    private actions$: Actions,
+    private videoConsoleService: VideoConsoleService
+  ) { }
+
+  @Effect()
+  loadVideoConsoles$ = this.actions$.pipe(
+    ofType(videoConsoleActions.VideoConsoleActionTypes.Load),
+    mergeMap((action: videoConsoleActions.Load) =>
+      this.videoConsoleService.getVideoConsoles()
+        .pipe(
+          map((vcs: VideoConsoleModel[]) => (
+            new videoConsoleActions.LoadSuccess(vcs)
+          )),
+          catchError(err => of(new videoConsoleActions.LoadFailed(err)))
+        )
+    )
+  );
+
+  @Effect()
+  updateVideoConsole$ = this.actions$.pipe(
+    ofType(videoConsoleActions.VideoConsoleActionTypes.UpdateVideoConsole),
+    map((action: videoConsoleActions.UpdateVideoConsole) => action.payload),
+    mergeMap((vc: VideoConsoleModel) => this.videoConsoleService.updateVideoConsole(vc).pipe( // [1]
+      map(vc => (new videoConsoleActions.UpdateVideoConsoleSuccess(vc))),
+      catchError(err => of(new videoConsoleActions.UpdateVideoConsoleFailed(err)))
+    ))
+  );
+}
+
+
