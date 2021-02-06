@@ -1,0 +1,12 @@
+<div class="panel panel-primary" *ngIf="games?.length">
+  <div class="panel-body">
+    <div class="list-group">
+      <button type="button" class="list-group-item" 
+      *ngFor="let game of games" 
+      [ngClass]="{'active': game?.id === selectedGame?.id}" 
+      (click)="onSelected(game)">
+        {{ game.name }} ({{ game.code }})
+      </button>
+    </div>
+  </div>
+</div>
