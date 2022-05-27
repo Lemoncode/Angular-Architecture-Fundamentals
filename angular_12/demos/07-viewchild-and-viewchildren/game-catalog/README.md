@@ -28,7 +28,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## In this demo we are going to work with ViewChild
 
-### Step 1. On game-list.component.html we are going to stablish a reference against the element that we want to handle.
+### Step 1. Template Variable 
+
+On game-list.component.html we are going to stablish a reference against the element that we want to handle.
 
 __src/app/games/game-list/game-list.component.html__
 
@@ -43,9 +45,9 @@ __src/app/games/game-list/game-list.component.ts__
 ...
 imageWidth: number = 50;
 imageMargin: number = 2;
-errorMessage: string;
+
 +
-+@ViewChild('filterElement', {static : false}) filterElementRef; 
++@ViewChild('filterElement', {static : false}) filterElementRef = null; 
 +
 filteredGames: GameModel[];
 games: GameModel[];
@@ -55,7 +57,9 @@ games: GameModel[];
 
 > https://angular.io/api/core/ViewChild
 
-### Step 2. But when is this reference assign to? Let's change constructor and a have a look what is going on there.
+### Step 2. Template Reference Populated 
+
+But when is this reference assign to? Let's change constructor and a have a look what is going on there.
 
 __src/app/games/game-list/game-list.component.ts__
 
@@ -69,13 +73,13 @@ constructor(private gameService: GameService) {
 + console.log(this.filterElementRef);
 }
 ```
-* If we open the developer tools we will find out that is undefined.
+* If we open the developer tools we will find out that is **null**.
 
-* It is undefined because component's lifecycle
+* It is null because component's lifecycle
   1. Component Construction and Initialization -> (constructor() / ngOnInit())
   2. View Initialization and Rendering -> (ngAfterViewInit())
 
-* When the component it is initialized the view is not rendered yet so the reference will be undefined.
+* When the component it is initialized the view is not rendered yet so the reference will be null.
 
 ### Step 3. Move to ngAfterViewInit life cycle hook
 
@@ -125,9 +129,11 @@ import { GameService } from '../game.service';
 }
 
 ```
-* If we run this now we will find out that the element is not longer undefined.
+* If we run this now we will find out that the element is not longer null.
 
-### Step 4. For last we are going to give focus to the input element.
+### Step 4. Setting Focus 
+
+For last we are going to give focus to the input element.
 
 __src/app/games/game-list/game-list.component.ts__
 
@@ -149,7 +155,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
   imageMargin = 2;
 
 - @ViewChild('filterElement') filterElementRef;
-+ @ViewChild('filterElement') filterElementRef: ElementRef;
++ @ViewChild('filterElement') filterElementRef!: ElementRef;
 
   filteredGames: GameModel[];
   games: GameModel[];
@@ -222,7 +228,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
   @ViewChild('filterElement') filterElementRef: ElementRef;
 + @ViewChildren('filterElement, nameElement')
-+ inputElementRefs: QueryList<ElementRef>;
++ inputElementRefs!: QueryList<ElementRef>;
 
   filteredGames: GameModel[];
   games: GameModel[];
@@ -253,7 +259,9 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
 * Now we can check out in console what is going on there.
 
-### Step 6. Now lets change it to `NgModel`, that will the same input elements access.
+### Step 6. Accesing View Children by Drective 
+
+Now lets change it to `NgModel`, that will the same input elements access.
 
 __src/app/games/game-list/game-list.component.ts__
 
@@ -267,7 +275,9 @@ inputElementRefs: QueryList<ElementRef>;
 
 * Now we can check out in console what is going on there.
 
-### Step 7. We can use ViewChild decorator to get notifications when user makes changes.
+### Step 7. Getting Notifications from ViewChild 
+
+We can use ViewChild decorator to get notifications when user makes changes.
 
 __src/app/games/game-list/game-list.component.html__
 

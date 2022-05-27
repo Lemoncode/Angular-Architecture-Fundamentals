@@ -26,7 +26,9 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-## In this demo we are going to work with notifications from the template to the component by user changes.
+## Notifying from template to component
+
+In this demo we are going to work with notifications from the template to the component by user changes.
 
 * There are three techniques to achieve this:
   - Two-way binding (long way)
@@ -46,7 +48,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 * Let's test this in the code
 
-### Step 1. Lets use the two way binding long way in our code
+### Step 1. Two Way Binding
+
+Lets use the two way binding long way in our code
 
 __src/app/games/game-list/game-list.component.html__
 
@@ -77,7 +81,9 @@ toggleImage(): void {
 ```
 * Lets see if works.
 
-### Step 2. Defining a property. Lets move the two way binding long way to getter / setter.
+### Step 2. Long Way Two Binding 
+
+Defining a property. Lets move the two way binding long way to getter / setter.
 
 * In TypeScript we can define a property two ways
 
@@ -134,7 +140,9 @@ set listFilter(value: string) {
 +}
 ```
 
-### Step 3. Now the only thing that we have to make this work is call the filter value.
+### Step 3. Update Filter 
+
+Now the only thing that we have to make this work is call the filter value.
 
 ```typescript
 set listFilter(value: string) {

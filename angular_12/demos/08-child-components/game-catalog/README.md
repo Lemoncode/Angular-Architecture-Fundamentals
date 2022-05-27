@@ -31,7 +31,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 * Pretty much any piece of a view can be built as a child component
 
 
-### Step 1. Let's build a child component so we have something to communicate with.
+### Step 1. Build a child component 
+
+Let's build a child component so we have something to communicate with.
 
 ```bash 
 ng g c shared/criteria --module=shared --skip-tests
