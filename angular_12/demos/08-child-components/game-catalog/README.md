@@ -66,7 +66,9 @@ export class SharedModule { }
 
 * It declares our shared components, and it exports components and the two imported modules so they are shared with any module that imports this _SharedModule_.
 
-### Step 2. Lets creat the criteria template
+### Step 2. Creating Criteria Template 
+
+Lets creat the criteria template
 
 * Remove from `game-list.component.html` this chunck of code. 
 
@@ -106,6 +108,7 @@ __src/app/shared/criteria/criteria.component.html__
         <h3>Filtered by: {{listFilter}} </h3>
     </div>
 </div>
+
 ```
 * Modify `criteria.component.ts`. If we still want to set focus to that element, we can cut the ViewChild property from the _GameListComponent_ and paste it into the _CriteriaComponent_.
 
@@ -162,7 +165,7 @@ import { GameService } from '../game.service';
 }
 
 ```
-1. Remove by now then we will handle it
+1. Remove by now then we will handle it, init to empty string by default to avoid typing issues.
 
 __src/app/shared/criteria/criteria.component.ts__
 
@@ -176,7 +179,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 })
 export class CriteriaComponent implements OnInit, AfterViewInit {
   listFilter: string;
-  @ViewChild('filterElement') filterElementRef: ElementRef;
+  @ViewChild('filterElement') filterElementRef!: ElementRef;
 
   constructor() { }
 
@@ -194,7 +197,9 @@ export class CriteriaComponent implements OnInit, AfterViewInit {
 ```
 * Let's check it out in the browser. Click on Product List, and open the console. It is good to see that there are no errors, but it also has no Filter by input element.
 
-### Step 3. We need to nest our new CriteriaComponent into our ProductList parent component to get back that functionality.
+### Step 3. Adding the child component 
+
+We need to nest our new CriteriaComponent into our ProductList parent component to get back that functionality.
 
 __src/app/games/game-list/game-list.component.html__
 
@@ -208,7 +213,9 @@ __src/app/games/game-list/game-list.component.html__
 
 * Now our criteria filter is encapsulated, we have to stablish a new communication between parent and child component.
 
-### Step 4. Lets start by passing data to a child component. Lets manage display the criteria filter using a flag from parent.
+### Step 4. Feeding child component 
+
+Lets start by passing data to a child component. Lets manage display the criteria filter using a flag from parent.
 
 __src/app/shared/criteria/criteria.component.ts__
 
@@ -230,7 +237,7 @@ import {
 export class CriteriaComponent implements OnInit, AfterViewInit {
   listFilter: string;
   @ViewChild('filterElement') filterElementRef: ElementRef;
-+ @Input() displayDetail: boolean;
++ @Input() displayDetail!: boolean;
 
   constructor() { }
 ...
@@ -273,7 +280,9 @@ __src/app/games/game-list/game-list.component.html__
 </div>
 ```
 
-### Step 5. We want to display the number of hits. So what we can do
+### Step 5. Displaying filtered length 
+
+We want to display the number of hits. So what we can do:
 
 __src/app/shared/criteria/criteria.component.ts__
 
@@ -301,11 +310,13 @@ __src/app/games/game-list/game-list.component.html__
 ```diff
 <div class="row">
 - <app-criteria [displayDetail]="includeDetail" class="col-md-10"></app-criteria>
-+ <app-criteria [displayDetail]="includeDetail" [hitCount]="filteredGames?.length" class="col-md-10"></app-criteria>
++ <app-criteria [displayDetail]="includeDetail" [hitCount]="filteredGames?.length!" class="col-md-10"></app-criteria>
 </div>
 ```
 
-### Step 6. We want to display a message depending on hit numbers. We can be notifyed be changes using get/set. But there is another technique that we can use `onChanges`
+### Step 6. Giving Feedback to User on FIltering Length 
+
+We want to display a message depending on hit numbers. We can be notifyed be changes using get/set. But there is another technique that we can use `onChanges`
 
 * Here in the _CriteriaComponent_, our goal is to monitor the _hitCount_ property and to display a different message if the value provided by the parent component is 0.
 
@@ -374,7 +385,9 @@ __src/app/shared/criteria/criteria.component.html__
 </div>
 ```
 
-### Step 7. To filter our list of games, the GameListComponent needs the Filter by value, but only the child component has the user-entered value from the Filter by box.
+### Step 7. Where is the filtering value? 
+
+To filter our list of games, the GameListComponent needs the Filter by value, but only the child component has the user-entered value from the Filter by box.
 
 * The parent _GameListComponent_ needs to get that value from the child component.
 
@@ -383,13 +396,15 @@ __src/app/games/game-list/game-list.component.html__
 ```diff game-list.component.html
 <div class="row">
 -  <app-criteria [displayDetail]="includeDetail" [hitCount]="filteredProducts?.length" class="col-md-10"></app-criteria>
-+  <app-criteria #filterCriteria [displayDetail]="includeDetail" [hitCount]="filteredGames?.length" class="col-md-10"></app-criteria>
++  <app-criteria #filterCriteria [displayDetail]="includeDetail" [hitCount]="filteredGames?.length!" class="col-md-10"></app-criteria>
 </div>
 +{{ filterCriteria.listFilter }}
 ```
 * What will happen with this line of code: `{{ filterCriteria.listFilter }}`? It will work? Yeah, because we have access to methods and properties of child component. 
 
-### Step 8. Now we are going to use this reference in the parent component class.
+### Step 8. Using Child Component Reference 
+
+Now we are going to use this reference in the parent component class.
 
 * We have two options, use the template reference variable, or just use the type of child component.
 * Remind that the ViewChild reference it's not available after the view initialization.
@@ -416,8 +431,8 @@ export class GameListComponent implements OnInit, AfterViewInit {
   imageWidth = 50;
   imageMargin = 2;
   /*diff*/
-  @ViewChild(CriteriaComponent)filterComponent: CriteriaComponent;
-  parentListFilter: string;
+  @ViewChild(CriteriaComponent)filterComponent!: CriteriaComponent;
+  parentListFilter = '';
   /*diff*/
   filteredGames: GameModel[];
   games: GameModel[];
@@ -459,7 +474,9 @@ export class GameListComponent implements OnInit, AfterViewInit {
 }
 
 ```
-### Step 9. We need a way that the child notifies the parent that a change has ocurred. We are going to use @Output to achieve this.
+### Step 9. Notifying Parent 
+
+We need a way that the child notifies the parent that a change has ocurred. We are going to use @Output to achieve this.
 
 __src/app/games/game-list/game-list.component.html__
 
@@ -474,7 +491,9 @@ __src/app/games/game-list/game-list.component.html__
 -{{filterCriteria.listFilter}}
 ```
 
-### Step 10. Lets modify criteria component so it can emit events.
+### Step 10. Update Child Component  
+
+Lets modify criteria component so it can emit events.
 
 __src\app\shared\criteria\criteria.component.ts__
 
@@ -511,14 +530,17 @@ export class CriteriaComponent implements OnInit, AfterViewInit, OnChanges {
 }
 
 ```
-### Step 11. We want to be notifyed whenever the listFilter value changes. We have different techniques to achieve this, but in this case we are going to use `get / set`.
+
+### Step 11.  Get Child Template Notification
+
+We want to be notifyed whenever the listFilter value changes. We have different techniques to achieve this, but in this case we are going to use `get / set`.
 
 __src/app/shared/criteria/criteria.component.ts__
 
 ```diff criteria.component.ts
 @Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
 +
-+  private _listFilter: string;
++  private _listFilter!: string;
 +  get listFilter(): string {
 +    return this._listFilter;
 +  }
@@ -529,7 +551,9 @@ __src/app/shared/criteria/criteria.component.ts__
 +  }
 ```
 
-### Step 12. Now we have to respond to these changes on parent component.
+### Step 12. React on Parent
+
+Now we have to respond to these changes on parent component.
 
 __src/app/games/game-list/game-list.component.html__
 

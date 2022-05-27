@@ -40,24 +40,24 @@ Update `demos/11-state-management-service/game-catalog/src/app/games/game-list/g
 
 ```ts
 ngAfterViewInit(): void {
-    this.filterComponent.listFilter = this.gameParameterService.filterBy;
-    this.parentListFilter = this.filterComponent.listFilter;
-  }
+  this.filterComponent.listFilter = this.gameParameterService.filterBy;
+  this.parentListFilter = this.filterComponent.listFilter;
+}
 
-  ngOnInit(): void {
-    this.gameService.getGames().subscribe((games: GameModel[]) => {
-      this.games = games;
-      if (this.filterComponent) {
-        this.filterComponent.listFilter = this.gameParameterService.filterBy;
-      }
-    });
-  }
+ngOnInit(): void {
+  this.gameService.getGames().subscribe((games: GameModel[]) => {
+    this.games = games;
+    if (this.filterComponent) {
+      this.filterComponent.listFilter = this.gameParameterService.filterBy;
+    }
+  });
+}
 ```
 
 ### Step 1. On our http services we are not taking care of handling error. Lets create a new service that will take care of this.
 
 ```bash
-$ ng g s core/http-error-handler --skip-tests
+ng g s core/http-error-handler --skip-tests
 ```
 
 __src/app/core/http-error-handler.service.ts__
@@ -67,7 +67,7 @@ import { InjectionToken } from '@angular/core';
 
 export const HTTP_ERROR_HANDLER = new InjectionToken<string>('HttpErrorHandler');
 
-export const handleError = (err) => {
+export const handleError = (err: any) => {
   let errorMessage: string;
   if (err.error instanceof Error) {
     errorMessage = `An error ocurred: ${err.error.message}`;

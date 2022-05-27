@@ -1,4 +1,6 @@
-### When we display multiple components in a view we have to keep it state in sync. We can create a bg property service to achieve this but we have a state manager service, so lets use it. 
+## Communicating concurrent components 
+
+When we display multiple components in a view we have to keep state on sync. We can create a bg property service to achieve this but we have a state manager service, so lets use it. 
 
 ### Step 1. Lets modify game.service.ts to make this possible.
 
@@ -19,7 +21,7 @@ import { HTTP_ERROR_HANDLER } from '../core/http-error-handler.service';
 export class GameService {
   private gamesUrl = 'api/games';
   private games: GameModel[];
-+ currentGame: GameModel | null;
++ currentGame!: GameModel | null;
 
   ...
 
@@ -142,7 +144,7 @@ import { GameService } from '../game.service';
 })
 export class GameSummaryDetailComponent implements OnInit {
 - game = this.gameService.currentGame;
-+ get game(): GameModel {
++ get game(): GameModel | null {
 +    return this.gameService.currentGame;
 + }
   constructor(private gameService: GameService) { }
@@ -160,7 +162,9 @@ export class GameSummaryDetailComponent implements OnInit {
 * All of this works because the property is bound, and change detection provides the change notifications. What if it wasn't bound? Is there a way to still get change notifications? 
 
 
- ### Step 5. One technique we can use is a timer. We can set a repeating timer, and every time the interval elapses, we can check for a new value. We'll use the timer from RxJS, which emits items periodically at a specified interval. 
+ ### Step 5. Changing without bound 
+ 
+ One technique we can use is a timer. We can set a repeating timer, and every time the interval elapses, we can check for a new value. We'll use the timer from RxJS, which emits items periodically at a specified interval. 
 
  ```diff game-summary-detail.component.ts
  import { Component, OnInit } from '@angular/core';
@@ -264,6 +268,7 @@ changeSelectedGame(selectedgame: GameModel) {
 ```
 
 * Any component or service can listen for that notification and respond accordingly.
+
 ```typescript Component or Service
 // Listen for and respond to the notification
 ```

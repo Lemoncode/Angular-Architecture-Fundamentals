@@ -34,8 +34,6 @@ export class GameService {
 + private selectedGameSource = new Subject<GameModel | null>();
 + selectedGameChange$ = this.selectedGameSource.asObservable();
 
-  
-
   constructor(
     private http: HttpClient,
     @Inject(HTTP_DATA_LOGGER) private logger,
@@ -129,7 +127,7 @@ export class GameSummaryDetailComponent implements OnInit {
 - get game(): GameModel {
 -   return this.gameService.currentGame;
 - }
-+ game: GameModel | null;
++ game!: GameModel | null;
 
   constructor(private gameService: GameService) { }
 
@@ -142,7 +140,7 @@ export class GameSummaryDetailComponent implements OnInit {
 
 ```
 
-### Step 5. Now it's time to add another subscription, in this case on `game-summary.component.ts`. It has a varaible that shows how many months a game has been on market currently it's not bound  to anything. Lets fix that with a subscription.
+### Step 5. Now it's time to add another subscription, in this case on `game-summary.component.ts`. It has a variable that shows how many months a game has been on market currently it's not bound  to anything. Lets fix that with a subscription.
 
 > Have a look into:  https://blog.rangle.io/rxjs-where-is-the-if-else-operator/
 
@@ -286,9 +284,10 @@ import { GameService } from '../game.service';
   templateUrl: './game-summary-detail.component.html',
   styles: []
 })
-export class GameSummaryDetailComponent implements OnInit, OnDestroy {
-  game: GameModel | null;
-+ sub: Subscription;
+-export class GameSummaryDetailComponent implements OnInit {
++export class GameSummaryDetailComponent implements OnInit, OnDestroy {
+  game!: GameModel | null;
++ sub!: Subscription;
 
   constructor(private gameService: GameService) { }
 

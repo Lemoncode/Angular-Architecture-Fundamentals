@@ -20,7 +20,7 @@ export class GameService {
 
   constructor(
     private http: HttpClient,
-    @Inject(HTTP_DATA_LOGGER) private logger
+    @Inject(HTTP_DATA_LOGGER) private logger: any
   ) { }
 
   getGames(): Observable<GameModel[]> {
@@ -95,7 +95,7 @@ export class GameService {
 ### Create game-edit component
 
 ```bash
-$ ng g c games/game-edit --module=games --skip-tests
+ng g c games/game-edit --module=games --skip-tests
 ```
 
 __src/app/games/game-edit/game-edit.component.html__
@@ -200,8 +200,6 @@ __src/app/games/game-edit/game-edit.component.html__
   </form>
 </div>
 
-
-
 ```
 
 __src/app/games/game-edit/game-edit.component.ts__
@@ -214,17 +212,21 @@ import { NgForm } from '@angular/forms';
 import { GameModel } from '../game.model';
 import { GameService } from '../game.service';
 
+interface IIndexable {
+  [key: string]: any;
+}
+
 @Component({
   selector: 'app-game-edit',
   templateUrl: './game-edit.component.html',
   styleUrls: ['./game-edit.component.css']
 })
 export class GameEditComponent implements OnInit {
-  @ViewChild(NgForm, { static: false }) editForm: NgForm;
+  @ViewChild(NgForm, { static: false }) editForm!: NgForm;
   pageTitle = 'Game Edit';
-  errorMessage: string;
-  private originalGame: GameModel;
-  game: GameModel;
+  errorMessage!: string;
+  private originalGame!: GameModel;
+  game!: GameModel;
 
   get isDirty(): boolean {
     return this.editForm.dirty ? true : false;
@@ -289,7 +291,7 @@ export class GameEditComponent implements OnInit {
           // Assign changes from copy
           Object.keys(this.game)
             .forEach(key =>
-              this.originalGame[key] = this.game[key]
+              (this.originalGame as IIndexable)[key]  = (this.game as IIndexable)[key]
             );
           this.onSaveComplete();
         })
@@ -403,7 +405,7 @@ __src/app/games/game-list/game-list.component.html__
 ### Create game-details
 
 ```bash
-$ ng g c games/game-details --module=games --skip-tests
+ng g c games/game-details --module=games --skip-tests
 ```
 
 __src/app/games/game-details/game-details.component.html__
@@ -485,7 +487,7 @@ import { GameService } from '../game.service';
 })
 export class GameDetailsComponent implements OnInit {
   pageTitle = 'Game Details';
-  game: GameModel;
+  game!: GameModel;
 
   constructor(
     private gameService: GameService,

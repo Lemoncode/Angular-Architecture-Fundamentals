@@ -27,12 +27,14 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 
-## In this demo we are going to manage state through the simplest way possible, we are going to use property bag state.
+## Property Bag Pattern
+
+In this demo we are going to manage state through the simplest way possible, we are going to use property bag state.
 
 ### Step 1. To create the service we are going to use the CLI. 
 
 ```bash
-$ ng g s games/game-parameter --skip-tests 
+ng g s games/game-parameter --skip-tests 
 ```
 * Do not forget to register the service in games module.
 
@@ -80,8 +82,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class GameParameterService {
-  showImage: boolean;
-  filterBy: string;
+  showImage!: boolean;
+  filterBy!: string;
 
   constructor() { }
 }

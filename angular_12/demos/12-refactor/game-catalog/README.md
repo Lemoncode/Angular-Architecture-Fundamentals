@@ -1,17 +1,15 @@
 ## Now lets make a refactor so we can display a list of games and its detail aside.
 
-### Step 1. Create a new folder `app/games/game-summary`
-
-### Step 2. Create components from shell terminal.
+### Step 1. Create components from shell terminal.
 
 ```bash
-$ ng g c games/game-summary/game-summary --flat -s --module=games --skip-tests
+ng g c games/game-summary/game-summary --flat -s --module=games --skip-tests
 ```
 ```bash
-$ ng g c games/game-summary/game-summary-list --flat -s --module=games --skip-tests
+ng g c games/game-summary/game-summary-list --flat -s --module=games --skip-tests
 ```
 ```bash
-$ ng g c games/game-summary/game-summary-detail --flat -s --module=games --skip-tests
+ng g c games/game-summary/game-summary-detail --flat -s --module=games --skip-tests
 ```
 
 ### Step 3. Create `game-summary-list` component.
@@ -47,8 +45,8 @@ import { GameService } from '../game.service';
   styles: []
 })
 export class GameSummaryListComponent implements OnInit {
-  games: GameModel[];
-  selectedGame: GameModel | null;
+  games!: GameModel[];
+  selectedGame!: GameModel | null;
 
   constructor(private gameService: GameService) { }
 
@@ -136,7 +134,7 @@ import { GameService } from '../game.service';
   styles: []
 })
 export class GameSummaryDetailComponent implements OnInit {
-
+  game!: GameModel;
   constructor(private gameService: GameService) { }
 
   ngOnInit() {
@@ -179,7 +177,7 @@ import { Component, OnInit } from '@angular/core';
   styles: []
 })
 export class GameSummaryComponent implements OnInit {
-  monthCount: number;
+  monthCount!: number;
   constructor() { }
 
   ngOnInit() {
