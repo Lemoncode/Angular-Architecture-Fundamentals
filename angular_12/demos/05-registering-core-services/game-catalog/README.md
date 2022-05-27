@@ -34,12 +34,14 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 * NOTE: The services that we are going to create right now are stateless so they can be registered into shared module. We will refactor this in future demos.
 
-### Step 1. Since we are using `angular-in-memory-web-api`, there is no network stuff happening, this is because is using interceptors under the hood. So, to notice what is going on we are going to create a logger service.
+### Step 1. Log In Memory Web API 
+
+Since we are using `angular-in-memory-web-api`, there is no network stuff happening, this is because is using interceptors under the hood. So, to notice what is going on we are going to create a logger service.
 
 Create __src/app/core/http-data-logger.service.ts__
 
 ```bash
-$ ng g s core/http-data-logger --skip-tests
+ng g s core/http-data-logger --skip-tests
 ```
 
 ```typescript http-data-logger.service.ts
@@ -47,7 +49,7 @@ import { InjectionToken } from '@angular/core';
 
 export const HTTP_DATA_LOGGER = new InjectionToken<string>('HttpDataLogger');
 
-export const logJSON = (data) => console.log(JSON.stringify(data));
+export const logJSON = (data: any) => console.log(JSON.stringify(data));
 
 ```
 
@@ -145,7 +147,7 @@ export class GameService {
 
   constructor(
     private http: HttpClient,
-+   @Inject(HTTP_DATA_LOGGER) private logger
++   @Inject(HTTP_DATA_LOGGER) private logger: any
     ) { }
 
   getGames(): Observable<GameModel[]> {

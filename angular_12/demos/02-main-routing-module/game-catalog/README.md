@@ -31,7 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### Step 1. Create `app-routing.module.ts`
 
 ```bash
-$ ng g m app-routing --flat
+ng g m app-routing --flat
 ```
 
 Edit as follows __src/app/app-routing.module.ts__

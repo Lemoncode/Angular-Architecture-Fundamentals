@@ -30,11 +30,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 * This is a `feature` module, `games`.
 
-### Step 1. The main part by now of this module it's going to be a game list. We are going to implement a full CRUD around games. But before we can start, when we're developing our applications, in many of them we have to consume a backend, there are many options to use a fake data, in this case we are going to use `angular-in-memory-web-api`, it is a great library that allow us create a data base in memory, and use http client module.
+### Step 1. Fake CRUD service support
+
+The main part by now of this module it's going to be a game list. We are going to implement a full CRUD around games. But before we can start, when we're developing our applications, in many of them we have to consume a backend, there are many options to use a fake data, in this case we are going to use `angular-in-memory-web-api`, it is a great library that allow us create a data base in memory, and use http client module.
 
 
 ```bash 
-$ npm i angular-in-memory-web-api -D
+$ npm i angular-in-memory-web-api@0.12.0  -D
 ```
 
 * Create a game model
@@ -154,7 +156,7 @@ export class AppModule { }
 * Discuss if this could be inejected in core module.
 
 ```bash
-$ ng g s games/game --skip-tests
+ng g s games/game --skip-tests
 ```
 * Ensure service is registered on module.
 
@@ -204,7 +206,7 @@ export class GameService {
 ### Step 3. Now we are going to create game-list component.
 
 ```bash
-$ ng g c games/game-list --module games --skip-tests
+ng g c games/game-list --module games --skip-tests
 ```
 
 __game-catalog/src/app/games/game-list/game-list.component.html__
@@ -322,7 +324,9 @@ export class GameListComponent implements OnInit {
 }
 
 ```
-### Step 4. This module it's going to be lazy loaded. To achive this first we are going to define module's routes. Bear in mind that we can do this in a separate route module, just for simplicity, lets use the game module.
+### Step 4. Module Lazy Loading 
+
+This module it's going to be lazy loaded. To achive this first we are going to define module's routes. Bear in mind that we can do this in a separate route module, just for simplicity, lets use the game module.
 
 ```diff game.module.ts
 import { NgModule } from '@angular/core';
@@ -349,7 +353,10 @@ import { GameService } from './game.service';
 export class GamesModule { }
 
 ```
-### Step 5. For last we have to register our module in `app.module`, since this is a lazy loaded module, the way is 'imported', it is a quite different.
+
+### Step 5. Update App Module
+
+For last we have to register our module in `app.module`, since this is a lazy loaded module, the way is 'imported', it is a quite different.
 
 ```diff app-routing.module.ts
 import { NgModule } from '@angular/core';

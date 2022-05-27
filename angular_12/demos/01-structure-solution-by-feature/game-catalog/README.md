@@ -82,19 +82,19 @@ project root/
 * To create the folder structure we are going to use `Angular CLI`
 
 ```bash
-$ ng g m core
+ng g m core
 ```
 
 ```bash
-$ ng g m games
+ng g m games
 ```
 
 ```bash
-$ ng g m user
+ng g m user
 ```
 
 ```bash
-$ ng g m shared
+ng g m shared
 ```
 
 ### Step 3. We are going to add manually the `home` folder, these are the components that will part of root module.
@@ -104,34 +104,31 @@ $ ng g m shared
 * Inside home create:
 
 ```bash
-$ ng g c home/menu --inline-style --flat --skip-tests
+ng g c home/menu --inline-style --flat --skip-tests
 ```
 
 ```bash
-$ ng g c home/welcome --inline-style --flat --skip-tests
+ ng g c home/welcome --inline-style --flat --skip-tests
 ```
 
 ```bash
-$ ng g c home/shell --inline-style --flat --skip-tests
+ng g c home/shell --inline-style --flat --skip-tests
 ```
 
 ```bash
-$ ng g c home/page-not-found -s -t --flat --skip-tests
+ng g c home/page-not-found -s -t --flat --skip-tests
 ```
 
 ### Step 4. Lets add bootstap to have a base of style.
 
 ```bash
-npm i bootstrap -S
+npm i bootstrap@4.x.x -S
 ```
 
-* Modify `angular.json` style entry to register bootstrap.
+* Modify `styles.css` to import bootstrap.
 
-```diff angular.json
-"styles": [
-  "src/styles.css",
-+ "node_modules/bootstrap/dist/css/bootstrap.css"
-],
+```diff 
++@import "~bootstrap/dist/css/bootstrap.min.css";
 ```
 
 ### Step 5. Add code for welcome.component.ts and welcome.component.html

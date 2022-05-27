@@ -156,13 +156,12 @@ Now we can import the shared module and bring all its export features.
 ```diff
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login.component';
 +import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [],
   imports: [
-    CommonModule,
+-   CommonModule,
 +   SharedModule
   ]
 })
@@ -173,10 +172,11 @@ export class UserModule { }
 ### Step 6. Now we can build the login component.
 
 ```bash
-$ ng g c user/login --flat --module user --skip-tests 
+ng g c user/login --flat --module user --skip-tests 
 ```
 
-```html login.component.html
+```html 
+<!-- login.component.html -->
 <div class='container'>
   <div class="panel-heading">
     {{pageTitle}}
