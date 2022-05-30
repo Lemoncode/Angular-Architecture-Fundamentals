@@ -47,7 +47,7 @@ export interface UserModel {
 ### Step 2. Create `auth` service.
 
 ```bash
-$ ng g s user/auth --flat --skip-tests
+ng g s user/auth --flat --skip-tests
 ```
 
 ```typescript auth.service.ts
@@ -57,8 +57,8 @@ import { UserModel } from './user.model';
 
 @Injectable()
 export class AuthService {
-  currentUser: UserModel | null;
-  redirectUrl: string;
+  currentUser!: UserModel | null;
+  redirectUrl!: string;
 
   constructor() { }
 

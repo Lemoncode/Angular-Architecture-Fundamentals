@@ -287,7 +287,7 @@ We want to display the number of hits. So what we can do:
 __src/app/shared/criteria/criteria.component.ts__
 
 ```diff
-+@Input() hitCount: number;
++@Input() hitCount!: number;
 ```
 
 __src/app/shared/criteria/criteria.component.html__
@@ -314,7 +314,7 @@ __src/app/games/game-list/game-list.component.html__
 </div>
 ```
 
-### Step 6. Giving Feedback to User on FIltering Length 
+### Step 6. Giving Feedback to User on Filtering Length 
 
 We want to display a message depending on hit numbers. We can be notifyed be changes using get/set. But there is another technique that we can use `onChanges`
 

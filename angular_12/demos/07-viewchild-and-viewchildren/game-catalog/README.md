@@ -353,7 +353,7 @@ __src/app/games/game-list/game-list.component.ts__
 ```diff
 ...
 @ViewChild('filterElement') filterElementRef: ElementRef;
-+@ViewChild(NgModel) filterInput: NgModel;
++@ViewChild(NgModel) filterInput!: NgModel;
 ...
 ```
 * The difference between both, is that in the first case we can access the native element

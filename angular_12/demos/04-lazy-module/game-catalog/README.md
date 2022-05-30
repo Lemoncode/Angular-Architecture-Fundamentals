@@ -36,7 +36,7 @@ The main part by now of this module it's going to be a game list. We are going t
 
 
 ```bash 
-$ npm i angular-in-memory-web-api@0.12.0  -D
+npm i angular-in-memory-web-api@0.12.0  -D
 ```
 
 * Create a game model
