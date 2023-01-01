@@ -131,7 +131,7 @@ import { HTTP_DATA_LOGGER } from '../core/http-data-logger.service';
 @Injectable()
 export class GameService {
   private gamesUrl = 'api/games';
-+ private games: GameModel[];
++ private games!: GameModel[];
 
   constructor(
     private http: HttpClient,

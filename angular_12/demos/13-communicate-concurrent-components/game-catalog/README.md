@@ -117,6 +117,7 @@ import { GameService } from '../game.service';
   styles: []
 })
 export class GameSummaryDetailComponent implements OnInit {
+- game!: GameModel;
 + game = this.gameService.currentGame;
   constructor(private gameService: GameService) { }
 
