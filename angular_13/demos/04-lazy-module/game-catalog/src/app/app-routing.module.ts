@@ -13,6 +13,11 @@ import { PageNotFoundComponent } from './home/page-not-found.component';
         component: ShellComponent,
         children: [
           { path: 'welcome', component: WelcomeComponent },
+          {
+            path: 'games',
+            loadChildren: () =>
+              import('./games/games.module').then((m) => m.GamesModule),
+          },
           { path: '', redirectTo: 'welcome', pathMatch: 'full' },
         ],
       },

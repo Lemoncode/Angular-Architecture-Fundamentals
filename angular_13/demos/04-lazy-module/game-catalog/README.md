@@ -127,32 +127,29 @@ export class AppModule { }
 ```
 ### Step 2. Now we are going to create a service to manage our fake data.
 
-* Discuss if this could be inejected in core module.
+* Discuss if this could be injected in core module.
 
 ```bash
 ng g s games/game --skip-tests
 ```
-* Ensure service is registered on module.
+* Ensure service is registered on module. Update `game.module.ts`.
 
-```typescript game.module.ts
+```typescript 
 import { NgModule } from '@angular/core';
-
 import { SharedModule } from '../shared/shared.module';
-
-import { GameListComponent } from './game-list/game-list.component';
-
 import { GameService } from './game.service';
 
 @NgModule({
+  declarations: [],
   imports: [
     SharedModule
   ],
-  declarations: [GameListComponent],
   providers: [
     GameService
   ]
 })
 export class GamesModule { }
+
 
 ```
 
@@ -255,17 +252,17 @@ import { GameService } from '../game.service';
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.component.html',
-  styleUrls: ['./game-list.component.css']
+  styleUrls: ['./game-list.component.css'],
 })
 export class GameListComponent implements OnInit {
-  listFilter: string;
-  showImage: boolean;
+  listFilter!: string;
+  showImage!: boolean;
 
   imageWidth = 50;
   imageMargin = 2;
 
-  filteredGames: GameModel[];
-  games: GameModel[];
+  filteredGames!: GameModel[];
+  games!: GameModel[];
 
   constructor(private gameService: GameService) { }
 
@@ -302,29 +299,31 @@ export class GameListComponent implements OnInit {
 
 This module it's going to be lazy loaded. To achive this first we are going to define module's routes. Bear in mind that we can do this in a separate route module, just for simplicity, lets use the game module.
 
-```diff game.module.ts
+* Update `game.module.ts` 
+
+```diff 
 import { NgModule } from '@angular/core';
 +import { RouterModule } from '@angular/router';
-
 import { SharedModule } from '../shared/shared.module';
-
+import { GameService } from './game.service';
 import { GameListComponent } from './game-list/game-list.component';
 
-import { GameService } from './game.service';
-
 @NgModule({
+  declarations: [
+    GameListComponent
+  ],
   imports: [
     SharedModule,
 +   RouterModule.forChild([
 +     { path: '', component: GameListComponent }
-+   ]),
++   ])
   ],
-  declarations: [GameListComponent],
   providers: [
     GameService
   ]
 })
 export class GamesModule { }
+
 
 ```
 
@@ -332,7 +331,9 @@ export class GamesModule { }
 
 For last we have to register our module in `app.module`, since this is a lazy loaded module, the way is 'imported', it is a quite different.
 
-```diff app-routing.module.ts
+* Update `app-routing.module.ts`
+
+```diff 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ShellComponent } from './home/shell.component';
