@@ -8,7 +8,18 @@ import { GameService } from '../game.service';
   styleUrls: ['./game-list.component.css'],
 })
 export class GameListComponent implements OnInit {
-  listFilter!: string;
+  // listFilter!: string;
+  private _listFilter!: string;
+
+  get listFilter(): string {
+    return this._listFilter;
+  }
+
+  set listFilter(value: string) {
+    this._listFilter = value;
+    this.performFilter(value);
+  } 
+
   showImage!: boolean;
 
   imageWidth = 50;
@@ -31,6 +42,11 @@ export class GameListComponent implements OnInit {
   toggleImage(): void {
     this.showImage = !this.showImage;
   }
+
+  // onFilterChange(filter: string): void {
+  //   this.listFilter = filter;
+  //   this.performFilter(this.listFilter);
+  // }
 
   performFilter(filterBy?: string): void {
     if (filterBy) {
