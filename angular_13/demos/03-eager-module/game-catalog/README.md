@@ -59,7 +59,7 @@ export class AuthService {
 ### Step 3. Create `auth-guard` service.
 
 ```bash
-$ ng g s user/auth-guard --skip-tests
+ng g s user/auth-guard --skip-tests
 ```
 
 ```typescript auth-guard.serevice.ts
@@ -151,42 +151,78 @@ ng g c user/login --flat --module user --skip-tests
 
 ```html 
 <!-- login.component.html -->
-<div class='container'>
+<div class="container">
   <div class="panel-heading">
-    {{pageTitle}}
+    {{ pageTitle }}
   </div>
-  <form class="form-horizontal" novalidate (ngSubmit)="login(loginForm)" #loginForm="ngForm" autocomplete="off">
+  <form
+    class="form-horizontal"
+    novalidate
+    (ngSubmit)="login(loginForm)"
+    #loginForm="ngForm"
+    autocomplete="off"
+  >
     <fieldset>
-      <div class="form-group" [ngClass]="{'has-error': (userNameVar.touched ||
-                              userNameVar.dirty) &&
-                              !userNameVar.valid }">
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error':
+            (userNameVar.touched || userNameVar.dirty) && !userNameVar.valid
+        }"
+      >
         <label class="col-md-2 control-label" for="userNameId">User Name</label>
 
         <div class="col-md-8">
-          <input class="form-control" id="userNameId" type="text" placeholder="User Name (required)" required ngModel
-            name="userName" #userNameVar="ngModel" />
-          <span class="help-block" *ngIf="(userNameVar.touched ||
-                                               userNameVar.dirty) &&
-                                               userNameVar.errors">
-            <span *ngIf="userNameVar.errors.required">
+          <input
+            class="form-control"
+            id="userNameId"
+            type="text"
+            placeholder="User Name (required)"
+            required
+            ngModel
+            name="userName"
+            #userNameVar="ngModel"
+          />
+          <span
+            class="help-block"
+            *ngIf="
+              (userNameVar.touched || userNameVar.dirty) && userNameVar.errors
+            "
+          >
+            <span *ngIf="userNameVar.errors?.['required']">
               User name is required.
             </span>
           </span>
         </div>
       </div>
 
-      <div class="form-group" [ngClass]="{'has-error': (passwordVar.touched ||
-                              passwordVar.dirty) &&
-                              !passwordVar.valid }">
+      <div
+        class="form-group"
+        [ngClass]="{
+          'has-error':
+            (passwordVar.touched || passwordVar.dirty) && !passwordVar.valid
+        }"
+      >
         <label class="col-md-2 control-label" for="passwordId">Password</label>
 
         <div class="col-md-8">
-          <input class="form-control" id="passwordId" type="password" placeholder="Password (required)" required
-            ngModel name="password" #passwordVar="ngModel" />
-          <span class="help-block" *ngIf="(passwordVar.touched ||
-                                               passwordVar.dirty) &&
-                                               passwordVar.errors">
-            <span *ngIf="passwordVar.errors.required">
+          <input
+            class="form-control"
+            id="passwordId"
+            type="password"
+            placeholder="Password (required)"
+            required
+            ngModel
+            name="password"
+            #passwordVar="ngModel"
+          />
+          <span
+            class="help-block"
+            *ngIf="
+              (passwordVar.touched || passwordVar.dirty) && passwordVar.errors
+            "
+          >
+            <span *ngIf="passwordVar.errors?.['required']">
               Password is required.
             </span>
           </span>
@@ -196,20 +232,23 @@ ng g c user/login --flat --module user --skip-tests
       <div class="form-group">
         <div class="col-md-4 col-md-offset-2">
           <span>
-            <button class="btn btn-primary" type="submit" style="width:80px;margin-right:10px" [disabled]="!loginForm.valid">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              style="width: 80px; margin-right: 10px"
+              [disabled]="!loginForm.valid"
+            >
               Log In
             </button>
           </span>
           <span>
-            <a class="btn btn-default" (click)="cancel()">
-              Cancel
-            </a>
+            <a class="btn btn-default" (click)="cancel()"> Cancel </a>
           </span>
         </div>
       </div>
     </fieldset>
   </form>
-  <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+  <div class="has-error" *ngIf="errorMessage">{{ errorMessage }}</div>
 </div>
 
 ```
