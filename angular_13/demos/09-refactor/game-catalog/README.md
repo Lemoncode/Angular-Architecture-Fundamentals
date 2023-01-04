@@ -100,14 +100,16 @@ ng g c games/game-edit --module=games --skip-tests
 
 ```html game-edit.component.html
 <div class="container">
-  <h3>{{pageTitle}}</h3>
+  <h3>{{ pageTitle }}</h3>
   <form class="form-horizontal" novalidate (ngSubmit)="saveGame()">
     <fieldset *ngIf="game">
       <div
         class="form-group"
-        [ngClass]="{'has-error': (gameNameVar.touched ||
-                                         gameNameVar.dirty || game.id !== 0) &&
-                                         !gameNameVar.valid }"
+        [ngClass]="{
+          'has-error':
+            (gameNameVar.touched || gameNameVar.dirty || game.id !== 0) &&
+            !gameNameVar.valid
+        }"
       >
         <label class="col-md-2 control-label" for="gameNameId">Game Name</label>
 
@@ -125,14 +127,15 @@ ng g c games/game-edit --module=games --skip-tests
           />
           <span
             class="help-block"
-            *ngIf="(gameNameVar.touched ||
-                                                   gameNameVar.dirty || game.id !== 0) &&
-                                                   gameNameVar.errors"
+            *ngIf="
+              (gameNameVar.touched || gameNameVar.dirty || game.id !== 0) &&
+              gameNameVar.errors
+            "
           >
-            <span *ngIf="gameNameVar.errors.required">
+            <span *ngIf="gameNameVar.errors?.['required']">
               Game name is required.
             </span>
-            <span *ngIf="gameNameVar.errors.minlength">
+            <span *ngIf="gameNameVar.errors?.['minlength']">
               Game name must be at least three characters.
             </span>
           </span>
@@ -141,9 +144,11 @@ ng g c games/game-edit --module=games --skip-tests
 
       <div
         class="form-group"
-        [ngClass]="{'has-error': (gameCodeVar.touched ||
-                                         gameCodeVar.dirty || game.id !== 0) &&
-                                         !gameCodeVar.valid }"
+        [ngClass]="{
+          'has-error':
+            (gameCodeVar.touched || gameCodeVar.dirty || game.id !== 0) &&
+            !gameCodeVar.valid
+        }"
       >
         <label class="col-md-2 control-label" for="gameCodeId">Game Code</label>
 
@@ -160,11 +165,12 @@ ng g c games/game-edit --module=games --skip-tests
           />
           <span
             class="help-block"
-            *ngIf="(gameCodeVar.touched ||
-                                                   gameCodeVar.dirty || game.id !== 0) &&
-                                                   gameCodeVar.errors"
+            *ngIf="
+              (gameCodeVar.touched || gameCodeVar.dirty || game.id !== 0) &&
+              gameCodeVar.errors
+            "
           >
-            <span *ngIf="gameCodeVar.errors.required">
+            <span *ngIf="gameCodeVar.errors?.['required']">
               Game code is required.
             </span>
           </span>
@@ -189,7 +195,7 @@ ng g c games/game-edit --module=games --skip-tests
         </div>
       </div>
 
-      <div class="has-error" *ngIf="errorMessage">{{errorMessage}}</div>
+      <div class="has-error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
       <div class="form-group">
         <div class="col-md-4 col-md-offset-2">
@@ -197,21 +203,21 @@ ng g c games/game-edit --module=games --skip-tests
             <button
               class="btn btn-primary"
               type="submit"
-              style="width:80px;margin-right:10px"
+              style="width: 80px; margin-right: 10px"
               [disabled]="!editForm.valid"
             >
               Save
             </button>
           </span>
           <span>
-            <a class="btn btn-default" style="width:80px" (click)="cancel()">
+            <a class="btn btn-default" style="width: 80px" (click)="cancel()">
               Cancel
             </a>
           </span>
           <span>
             <a
               class="btn btn-default"
-              style="width:80px"
+              style="width: 80px"
               (click)="deleteGame()"
             >
               Delete
