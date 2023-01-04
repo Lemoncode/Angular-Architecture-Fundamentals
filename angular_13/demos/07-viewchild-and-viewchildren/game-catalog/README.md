@@ -1,139 +1,364 @@
 # GameCatalog
 
-## Notifying from template to component
+## In this demo we are going to work with ViewChild
 
-In this demo we are going to work with notifications from the template to the component by user changes.
+### Step 1. Template Variable
 
-* There are three techniques to achieve this:
-  - Two-way binding (long way)
-  - Getter and setter
-  - Value changes observable
+On `game-list.component.html` we are going to stablish a reference against the element that we want to handle.
 
-* Right now we have this:
+**src/app/games/game-list/game-list.component.html**
 
-```html
-<input type="text" [(ngModel)]="listFilter" />
+```diff
+-<input type='text'
++<input type='text' #filterElement
+  [(ngModel)]='listFilter' />
 ```
-* Our component property is changed, but our component is not notified of that change, so we don't have a way to perform an operation input component every time a value changes.
 
-* However we can bind a function in our component. The sad path is that we do not automatically set the property, no two way binding any more
+**src/app/games/game-list/game-list.component.ts**
 
-> Visist `http://localhost:4200/games` to check current behavior
+```diff
+...
+imageWidth: number = 50;
+imageMargin: number = 2;
 
-* Let's test this in the code
++
++@ViewChild('filterElement', {static : false}) filterElementRef = null;
++
+filteredGames: GameModel[];
+games: GameModel[];
+...
+```
 
-### Step 1. Two Way Binding
+- This way filterElementRef will contain a reference to the input element so we can access the element's properties or call its methods.
 
-Lets use the two way binding long way in our code
+> https://angular.io/api/core/ViewChild
 
-__src/app/games/game-list/game-list.component.html__
+### Step 2. Template Reference Populated
 
-* Update `game-list.component.html`
+But when is this reference assign to? Let's change constructor and a have a look what is going on there.
 
-```diff 
+**src/app/games/game-list/game-list.component.ts**
+
+```diff
+@ViewChild('filterElement') filterElementRef;
+
+filteredGames: GameModel[];
+games: GameModel[];
+
+constructor(private gameService: GameService) {
++ console.log(this.filterElementRef);
+}
+```
+
+- If we open the developer tools we will find out that is **null**.
+
+- It is null because component's lifecycle
+
+  1. Component Construction and Initialization -> (constructor() / ngOnInit())
+  2. View Initialization and Rendering -> (ngAfterViewInit())
+
+- When the component it is initialized the view is not rendered yet so the reference will be null.
+
+### Step 3. Move to ngAfterViewInit life cycle hook
+
+**src/app/games/game-list/game-list.component.ts**
+
+```diff
+-import { Component, OnInit, ViewChild } from '@angular/core';
++import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { GameModel } from '../game.model';
+import { GameService } from '../game.service';
+
+@Component({
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css']
+})
+-export class GameListComponent implements OnInit {
++export class GameListComponent implements OnInit, AfterViewInit {
+  showImage: boolean;
+
+  imageWidth = 50;
+  imageMargin = 2;
+
+  @ViewChild('filterElement') filterElementRef;
+
+  ...
+
+  constructor(private gameService: GameService) {
+-    console.log(this.filterElementRef);
+  }
+
++ ngAfterViewInit(): void {
++   console.log(this.filterElementRef);
++ }
+
+  ngOnInit() {
+    this.gameService.getGames().subscribe(
+      (games: GameModel[]) => {
+        this.games = games;
+        this.performFilter(this.listFilter);
+      }
+    );
+  }
+
+  ....
+
+}
+
+```
+
+- If we run this now we will find out that the element is not longer null.
+
+### Step 4. Setting Focus
+
+For last we are going to give focus to the input element.
+
+**src/app/games/game-list/game-list.component.ts**
+
+```diff
+-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
++import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { GameModel } from '../game.model';
+import { GameService } from '../game.service';
+
+@Component({
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css']
+})
+export class GameListComponent implements OnInit, AfterViewInit {
+  showImage: boolean;
+
+  imageWidth = 50;
+  imageMargin = 2;
+
+- @ViewChild('filterElement') filterElementRef;
++ @ViewChild('filterElement') filterElementRef!: ElementRef;
+
+  filteredGames: GameModel[];
+  games: GameModel[];
+  ....
+
+  constructor(private gameService: GameService) {}
+
+  ngAfterViewInit(): void {
+-   console.log(this.filterElementRef);
++   this.filterElementRef.nativeElement.focus();
+  }
+
+....
+}
+
+```
+
+### Bear in mind...
+
+- There are a few considerations we need to keep in mind when working with ViewChild to access a native element.
+
+- If we use nativeElement, we are directly accessing the DOM, or Document Object Model. The DOM is the set of data structures that manage the HTML elements for display in the browser.
+
+- This means that we are tightly coupled to the browser and may not be able to use server-side rendering or web workers. One way we can protect our code from this issue is to check for the existence of the native element before accessing its properties or methods using code like this. We first check for the native element and only proceed if the value is not null or undefined.
+
+- In addition, using nativeElement can pose a security threat, especially when accessing its innerHtml property. It can make an application more vulnerable to cross-site scripting, XSS, attacks. If these considerations are not relevant to your application, then you can freely use ViewChild to access the native element.
+
+> How to set focus on element Angular: https://stackoverflow.com/questions/50006888/set-focus-on-input-element
+
+### Step 5. Now lets have a look into `ViewChildren`
+
+**src/app/games/game-list/game-list.component.html**
+
+```diff
+<!-- Filter by the Title   -->
 <div class='row'>
     <div class='col-md-2'>Filter by:</div>
     <div class='col-md-4'>
--       <input type='text'
--               [(ngModel)]='listFilter' />
-+       <input type="text"
-+                    [ngModel]="listFilter"
-+                    (ngModelChange)="onFilterChange($event)">
+        <input type='text' #filterElement
+                [(ngModel)]='listFilter' />
     </div>
++   <div class='col-md-2'>Filter name:</div>
++   <div class='col-md-4'>
++       <input type='text' #nameElement
++               [(ngModel)]='listFilter' />
++
++   </div>
 </div>
 ```
 
-```diff game-list.component.ts
+**src\app\games\game-list\game-list.component.ts**
+
+```diff
+-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
++import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { NgModel } from '@angular/forms';
+import { GameModel } from '../game.model';
+import { GameService } from '../game.service';
+
+@Component({
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css']
+})
+export class GameListComponent implements OnInit, AfterViewInit {
+  showImage: boolean;
+
+  imageWidth = 50;
+  imageMargin = 2;
+
+  @ViewChild('filterElement') filterElementRef: ElementRef;
++ @ViewChildren('filterElement, nameElement')
++ inputElementRefs!: QueryList<ElementRef>;
+
+  filteredGames: GameModel[];
+  games: GameModel[];
+
+  private _listFilter: string;
+
+  get listFilter(): string {
+    return this._listFilter;
+  }
+
+  set listFilter(value: string) {
+    this._listFilter = value;
+    this.performFilter(this.listFilter);
+  }
+
+  constructor(private gameService: GameService) {}
+
+  ngAfterViewInit(): void {
+    // console.log(this.filterElementRef);
+    this.filterElementRef.nativeElement.focus();
++   console.log(this.inputElementRefs);
+  }
+...
+
+}
+
+```
+
+- Now we can check out in console what is going on there.
+
+### Step 6. Accesing View Children by Drective
+
+Now lets change it to `NgModel`, that will the same input elements access.
+
+**src/app/games/game-list/game-list.component.ts**
+
+```diff
++import { NgModel } from '@angular/forms';
 ....
-toggleImage(): void {
-  this.showImage = !this.showImage;
+- @ViewChildren('filterElement, nameElement')
++@ViewChildren(NgModel)
+inputElementRefs: QueryList<ElementRef>;
+```
+
+- Now we can check out in console what is going on there.
+
+### Step 7. Getting Notifications from ViewChild
+
+We can use ViewChild decorator to get notifications when user makes changes.
+
+**src/app/games/game-list/game-list.component.html**
+
+```diff
+<div class='row'>
+    <div class='col-md-2'>Filter by:</div>
+    <div class='col-md-4'>
+        <input type='text' #filterElement
+                [(ngModel)]='listFilter' />
+    </div>
+-   <div class='col-md-2'>Filter name:</div>
+-   <div class='col-md-4'>
+-       <input type='text' #nameElement
+-               [(ngModel)]='listFilter' />
+-    </div>
+</div>
+```
+
+**src/app/games/game-list/game-list.component.ts**
+
+```diff
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { NgModel } from '@angular/forms';
+
+import { GameModel } from '../game.model';
+import { GameService } from '../game.service';
+
+@Component({
+  selector: 'app-game-list',
+  templateUrl: './game-list.component.html',
+  styleUrls: ['./game-list.component.css']
+})
+export class GameListComponent implements OnInit, AfterViewInit {
+  showImage: boolean;
++ listFilter: string;
+  imageWidth = 50;
+  imageMargin = 2;
+
+  @ViewChild('filterElement') filterElementRef: ElementRef;
+- @ViewChildren(NgModel)
+- inputElementRefs: QueryList<ElementRef>;
+
+  filteredGames: GameModel[];
+  games: GameModel[];
+
+- private _listFilter: string;
+
+- get listFilter(): string {
+-   return this._listFilter;
+- }
+
+- set listFilter(value: string) {
+-   this._listFilter = value;
+-   this.performFilter(this.listFilter);
+- }
+
+  constructor(private gameService: GameService) {}
+
+  ngAfterViewInit(): void {
+    this.filterElementRef.nativeElement.focus();
+-   console.log(this.inputElementRefs);
+  }
+
+...
 }
-+
-+onFilterChange(filter: string): void {
-+  this.listFilter = filter;
-+  this.performFilter(this.listFilter);
-+}
+
+```
+
+We create `@ViewChild` with a reference to the `NgModel` directive.
+
+**src/app/games/game-list/game-list.component.ts**
+
+```diff
+...
+@ViewChild('filterElement') filterElementRef: ElementRef;
++@ViewChild(NgModel) filterInput!: NgModel;
 ...
 ```
-* Lets see if works.
 
-### Step 2. Long Way Two Binding 
+- The difference between both, is that in the first case we can access the native element
+- The second case we are getting access to the ngModel data structures. We are not accessing the native element.
 
-Defining a property. Lets move the two way binding long way to getter / setter.
+**src\app\games\game-list\game-list.component.ts**
 
-* In TypeScript we can define a property two ways
-
-```typescript 
-// Property Declaration
-listFilter: string;
-```
-
-```typescript Getter and Setter
-get listFilter(): string {
-
-}
-
-set listFilter(value: string) {
-
+```diff
+ngAfterViewInit(): void {
+  this.filterElementRef.nativeElement.focus();
++ this.filterInput.valueChanges.subscribe(
++   () => this.performFilter(this.listFilter)
++ );
 }
 ```
 
-```typescript 
-// common pattern
-private _listFilter: string;
+This is not really working, _filterInput_ is updated before _listFilter_, if we want that works properly:
 
-get listFilter(): string {
-  return this._listFilter;
-}
-
-set listFilter(value: string) {
-  this._listFilter = value;
-}
-```
-* Any time we change our value on setter we will get notified!
-
-* Update `game-list.component.html`
-
-```diff 
-+<input type='text' [(ngModel)]='listFilter' />
--<input type="text" [ngModel]="listFilter" (ngModelChange)="onFilterChange($event)">
-```
-
-* Update `game-list.component.ts`
-
-```diff 
-...
--onFilterChange(filter: string): void {
--  this.listFilter = filter;
--  this.performFilter(this.listFilter);
--}
-...
-```
-
-```diff game-list.component.ts
-- listFilter: string;
-+private _listFilter: string;
-+
-+get listFilter(): string {
-+  return this._listFilter;
-+}
-+
-+set listFilter(value: string) {
-+  this._listFilter = value;
-+}
-```
-
-### Step 3. Update Filter 
-
-Now the only thing that we have to make this work is call the filter value.
-
-```typescript
-set listFilter(value: string) {
-  this._listFilter = value;
-  this.performFilter(value);
+```ts
+ngAfterViewInit(): void {
+  this.filterElementRef.nativeElement.focus();
+  this.filterInput.valueChanges.subscribe((value) => {
+    this.performFilter(value);
+  });
 }
 ```
 
-* When possible use binding and structural directives
-* If we need to notify the component when the user changes the value of an input element, we can expand the two-way binding long way.
-* Alternativally we can use the get/set, we do not lose two way binding, and template is not modified, more code.
+- Now we can check if the filter is working again.
