@@ -4,28 +4,16 @@
     </div> -->
 
   <div>
-    <!-- Filter by the Title   -->
+    <!-- Filter by the title -->
     <div class="row">
-      <div class="col-md-2">Filter by:</div>
-      <div class="col-md-4">
-        <input type="text" #filterElement [(ngModel)]="listFilter" />
-        <!-- <input
-          type="text"
-          [ngModel]="listFilter"
-          (ngModelChange)="onFilterChange($event)"
-        /> -->
-      </div>
-      <!-- <div class="col-md-2">Filter name:</div>
-      <div class="col-md-4">
-        <input type="text" #nameElement [(ngModel)]="listFilter" />
-      </div> -->
+      <app-criteria
+        #filterCriteria
+        [displayDetail]="includeDetail"
+        [hitCount]="filteredGames?.length!"
+        (valueChange)="onValueChange($event)"
+        class="col-md-10"
+      ></app-criteria>
     </div>
-    <div class="row" [hidden]="!listFilter">
-      <div class="col-md-10">
-        <h3>Filtered by: {{ listFilter }}</h3>
-      </div>
-    </div>
-
     <div class="table-responsive">
       <table class="table" *ngIf="games && games.length">
         <thead>

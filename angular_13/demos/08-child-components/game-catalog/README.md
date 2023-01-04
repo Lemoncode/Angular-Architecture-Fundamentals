@@ -173,7 +173,7 @@ export class CriteriaComponent implements OnInit, AfterViewInit {
 }
 ```
 
-- Let's check it out in the browser. Click on Product List, and open the console. It is good to see that there are no errors, but it also has no Filter by input element.
+- Let's check it out in the browser. Navigate to Game List, and open the console. It is good to see that there are no errors, but it also has no Filter by input element.
 
 ### Step 3. Adding the child component
 
