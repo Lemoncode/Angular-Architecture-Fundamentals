@@ -26,7 +26,6 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-
 ## In this demo we are going to create a state manager service.
 
 Change `demos/11-state-management-service/game-catalog/src/app/games/game-edit/game-edit.component.ts` to avoid issues
@@ -60,12 +59,14 @@ ngOnInit(): void {
 ng g s core/http-error-handler --skip-tests
 ```
 
-__src/app/core/http-error-handler.service.ts__
+**src/app/core/http-error-handler.service.ts**
 
 ```typescript
-import { InjectionToken } from '@angular/core';
+import { InjectionToken } from "@angular/core";
 
-export const HTTP_ERROR_HANDLER = new InjectionToken<string>('HttpErrorHandler');
+export const HTTP_ERROR_HANDLER = new InjectionToken<string>(
+  "HttpErrorHandler"
+);
 
 export const handleError = (err: any) => {
   let errorMessage: string;
@@ -75,10 +76,10 @@ export const handleError = (err: any) => {
     errorMessage = `Backend returned code ${err.status}, body was: ${err.error}`;
   }
   throw new Error(errorMessage);
-}
+};
 ```
 
-* Register on `core.module`
+- Register on `core.module`
 
 ```diff core.module.ts
 import {
@@ -115,7 +116,7 @@ export class CoreModule { }
 
 ### Step 2. Lest change `game.service.ts` to convert into a service that manages state.
 
-__src/app/games/game.service.ts__
+**src/app/games/game.service.ts**
 
 ```diff game.service.ts
 import { Injectable, Inject } from '@angular/core';
@@ -153,9 +154,10 @@ export class GameService {
   }
 ...
 ```
-* Lets see if it's working
 
-### Step 3. Now we want to make the same with `getGame` 
+- Lets see if it's working
+
+### Step 3. Now we want to make the same with `getGame`
 
 ```diff game.service.ts
 getGame(id: number): Observable<GameModel> {
@@ -272,11 +274,12 @@ export class GameService {
   }
 ....
 ```
-* Lets see if works.
 
-* Whenever the user create, delete or update a product, our cache list have to reflect these updates.
+- Lets see if works.
 
-* If we edit an element it will work, but if we add a new element not. Why? Because we return the item from our private list of games. We return that item by reference, so when is editing is editing that item in the list. When adding we are returning a new item that is not registered on our private list.
+- Whenever the user create, delete or update a product, our cache list have to reflect these updates.
+
+- If we edit an element it will work, but if we add a new element not. Why? Because we return the item from our private list of games. We return that item by reference, so when is editing is editing that item in the list. When adding we are returning a new item that is not registered on our private list.
 
 ### Step 5.Update private list whenever a new game is added.
 
@@ -291,6 +294,7 @@ private creategame(game: GameModel, headers: HttpHeaders): Observable<GameModel>
       );
   }
 ```
+
 1. This is because or in-memory-web-api
 
 ### Step 6. Looking back to our code, we have the same problem with delete.

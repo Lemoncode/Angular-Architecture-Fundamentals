@@ -1,4 +1,4 @@
-# APM
+# Game Catalog
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
 
@@ -26,19 +26,21 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-
 ## Property Bag Pattern
 
 In this demo we are going to manage state through the simplest way possible, we are going to use property bag state.
 
-### Step 1. To create the service we are going to use the CLI. 
+### Step 1. To create the service we are going to use the CLI.
 
 ```bash
-ng g s games/game-parameter --skip-tests 
+ng g s games/game-parameter --skip-tests
 ```
-* Do not forget to register the service in games module.
 
-```diff games.module.ts
+- Do not forget to register the service in games module.
+
+- Update `games.module.ts`
+
+```diff 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -77,39 +79,49 @@ export class GamesModule { }
 
 ### Step 2. Now lets register the properties that we want to track.
 
-```typescript game-parameter.service.ts
-import { Injectable } from '@angular/core';
+- Update `game-parameter.service.ts`
+
+```typescript 
+import { Injectable } from "@angular/core";
 
 @Injectable()
 export class GameParameterService {
   showImage!: boolean;
   filterBy!: string;
 
-  constructor() { }
+  constructor() {}
 }
 ```
 
 ### Step 3. Use in game-list.component.ts the new created service.
 
-* Inject the service.
-* Create get / set for showImage
-* Set the filter value -> `onValueChange`
+- Inject the service.
+- Create get / set for showImage
+- Set the filter value -> `onValueChange`
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```typescript game-list.component.ts
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+} from "@angular/core";
+import { NgModel } from "@angular/forms";
 
-import { GameModel } from '../game.model';
-import { GameService } from '../game.service';
-import { CriteriaComponent } from 'src/app/shared/criteria/criteria.component';
-import { GameParameterService } from '../game-parameter.service';
+import { GameModel } from "../game.model";
+import { GameService } from "../game.service";
+import { CriteriaComponent } from "src/app/shared/criteria/criteria.component";
+import { GameParameterService } from "../game-parameter.service";
 
 @Component({
-  selector: 'app-game-list',
-  templateUrl: './game-list.component.html',
-  styleUrls: ['./game-list.component.css']
+  selector: "app-game-list",
+  templateUrl: "./game-list.component.html",
+  styleUrls: ["./game-list.component.css"],
 })
 // export class GameListComponent implements OnInit, AfterViewInit {
 export class GameListComponent implements OnInit, AfterViewInit {
@@ -118,7 +130,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
   imageWidth = 50;
   imageMargin = 2;
 
-  @ViewChild(CriteriaComponent)filterComponent: CriteriaComponent;
+  @ViewChild(CriteriaComponent) filterComponent: CriteriaComponent;
   parentListFilter: string;
   filteredGames: GameModel[];
   games: GameModel[];
@@ -137,7 +149,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
   constructor(
     private gameService: GameService,
     private gameParameterService: GameParameterService
-    ) {}
+  ) {}
   /*diff*/
 
   ngAfterViewInit(): void {
@@ -145,15 +157,13 @@ export class GameListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.gameService.getGames().subscribe(
-      (games: GameModel[]) => {
-        this.games = games;
-        /*diff*/
-        this.filterComponent.listFilter = this.gameParameterService.filterBy;
-        // this.performFilter(this.parentListFilter);
-        /*diff*/
-      }
-    );
+    this.gameService.getGames().subscribe((games: GameModel[]) => {
+      this.games = games;
+      /*diff*/
+      this.filterComponent.listFilter = this.gameParameterService.filterBy;
+      // this.performFilter(this.parentListFilter);
+      /*diff*/
+    });
   }
 
   onValueChange(value: string): void {
@@ -169,18 +179,16 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
   performFilter(filterBy?: string): void {
     if (filterBy) {
-      this.filteredGames = this.games
-        .filter(
-          (g: GameModel) =>
-          g.name.toLocaleLowerCase()
-            .indexOf(filterBy.toLocaleLowerCase()) !== -1
-        );
+      this.filteredGames = this.games.filter(
+        (g: GameModel) =>
+          g.name.toLocaleLowerCase().indexOf(filterBy.toLocaleLowerCase()) !==
+          -1
+      );
     } else {
       this.filteredGames = this.games;
     }
   }
-
 }
-
 ```
-* Check if works. Navigate to other components, and watch if state persists.
+
+- Check if works. Navigate to other components, and watch if state persists.

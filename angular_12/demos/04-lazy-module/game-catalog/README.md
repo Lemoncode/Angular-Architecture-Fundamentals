@@ -153,14 +153,14 @@ export class AppModule { }
 ```
 ### Step 2. Now we are going to create a service to manage our fake data.
 
-* Discuss if this could be inejected in core module.
+* Discuss if this could be injected in core module.
 
 ```bash
 ng g s games/game --skip-tests
 ```
-* Ensure service is registered on module.
+* Ensure service is registered on module. Update `game.module.ts`.
 
-```typescript game.module.ts
+```typescript 
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
@@ -328,7 +328,9 @@ export class GameListComponent implements OnInit {
 
 This module it's going to be lazy loaded. To achive this first we are going to define module's routes. Bear in mind that we can do this in a separate route module, just for simplicity, lets use the game module.
 
-```diff game.module.ts
+* Update `game.module.ts`
+
+```diff 
 import { NgModule } from '@angular/core';
 +import { RouterModule } from '@angular/router';
 
@@ -358,7 +360,9 @@ export class GamesModule { }
 
 For last we have to register our module in `app.module`, since this is a lazy loaded module, the way is 'imported', it is a quite different.
 
-```diff app-routing.module.ts
+* Update `app-routing.module.ts`
+
+```diff 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ShellComponent } from './home/shell.component';

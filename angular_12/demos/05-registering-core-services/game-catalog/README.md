@@ -44,7 +44,9 @@ Create __src/app/core/http-data-logger.service.ts__
 ng g s core/http-data-logger --skip-tests
 ```
 
-```typescript http-data-logger.service.ts
+* Update `http-data-logger.service.ts`
+
+```typescript 
 import { InjectionToken } from '@angular/core';
 
 export const HTTP_DATA_LOGGER = new InjectionToken<string>('HttpDataLogger');
@@ -57,7 +59,9 @@ export const logJSON = (data: any) => console.log(JSON.stringify(data));
 
 ### Step 2. Now we are going to register into core module providers.
 
-```typescript core.module.ts
+* Update `core.module.ts`
+
+```typescript 
 import {
   NgModule
 } from '@angular/core';
@@ -84,7 +88,9 @@ export class CoreModule { }
 ```
 ### Step 3. To use this service in our application we have to import the core module, into app module.
 
-```diff app.module.ts
+* Update `app.module.ts`
+
+```diff 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -130,7 +136,9 @@ export class AppModule { }
 ```
 ### Step 4. Now we can consume it.
 
-```diff game.service.ts
+* Update `game.service.ts`
+
+```diff 
 -import { Injectable } from '@angular/core';
 +import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';

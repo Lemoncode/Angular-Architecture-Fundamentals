@@ -28,11 +28,11 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## In this demo we are going to work with ViewChild
 
-### Step 1. Template Variable 
+### Step 1. Template Variable
 
 On game-list.component.html we are going to stablish a reference against the element that we want to handle.
 
-__src/app/games/game-list/game-list.component.html__
+**src/app/games/game-list/game-list.component.html**
 
 ```diff
 -<input type='text'
@@ -40,28 +40,30 @@ __src/app/games/game-list/game-list.component.html__
   [(ngModel)]='listFilter' />
 ```
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
+
 ```diff
 ...
 imageWidth: number = 50;
 imageMargin: number = 2;
 
 +
-+@ViewChild('filterElement', {static : false}) filterElementRef = null; 
++@ViewChild('filterElement', {static : false}) filterElementRef = null;
 +
 filteredGames: GameModel[];
 games: GameModel[];
 ...
 ```
-* This way filterElementRef will contain a reference to the input element so we can access the element's properties or call its methods.
+
+- This way filterElementRef will contain a reference to the input element so we can access the element's properties or call its methods.
 
 > https://angular.io/api/core/ViewChild
 
-### Step 2. Template Reference Populated 
+### Step 2. Template Reference Populated
 
 But when is this reference assign to? Let's change constructor and a have a look what is going on there.
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```diff
 @ViewChild('filterElement') filterElementRef;
@@ -69,21 +71,23 @@ __src/app/games/game-list/game-list.component.ts__
 filteredGames: GameModel[];
 games: GameModel[];
 
-constructor(private gameService: GameService) { 
+constructor(private gameService: GameService) {
 + console.log(this.filterElementRef);
 }
 ```
-* If we open the developer tools we will find out that is **null**.
 
-* It is null because component's lifecycle
+- If we open the developer tools we will find out that is **null**.
+
+- It is null because component's lifecycle
+
   1. Component Construction and Initialization -> (constructor() / ngOnInit())
   2. View Initialization and Rendering -> (ngAfterViewInit())
 
-* When the component it is initialized the view is not rendered yet so the reference will be null.
+- When the component it is initialized the view is not rendered yet so the reference will be null.
 
 ### Step 3. Move to ngAfterViewInit life cycle hook
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```diff
 -import { Component, OnInit, ViewChild } from '@angular/core';
@@ -129,13 +133,14 @@ import { GameService } from '../game.service';
 }
 
 ```
-* If we run this now we will find out that the element is not longer null.
 
-### Step 4. Setting Focus 
+- If we run this now we will find out that the element is not longer null.
+
+### Step 4. Setting Focus
 
 For last we are going to give focus to the input element.
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```diff
 -import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
@@ -175,21 +180,21 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
 ### Bear in mind...
 
-*  There are a few considerations we need to keep in mind when working with ViewChild to access a native element. 
+- There are a few considerations we need to keep in mind when working with ViewChild to access a native element.
 
-* If we use nativeElement, we are directly accessing the DOM, or Document Object Model. The DOM is the set of data structures that manage the HTML elements for display in the browser. 
+- If we use `nativeElement`, we are directly accessing the DOM, or Document Object Model. The DOM is the set of data structures that manage the HTML elements for display in the browser.
 
-* This means that we are tightly coupled to the browser and may not be able to use server-side rendering or web workers. One way we can protect our code from this issue is to check for the existence of the native element before accessing its properties or methods using code like this. We first check for the native element and only proceed if the value is not null or undefined. 
+- This means that we are tightly coupled to the browser and may not be able to use server-side rendering or web workers. One way we can protect our code from this issue is to check for the existence of the native element before accessing its properties or methods using code like this. We first check for the native element and only proceed if the value is not null or undefined.
 
-* In addition, using nativeElement can pose a security threat, especially when accessing its innerHtml property. It can make an application more vulnerable to cross-site scripting, XSS, attacks. If these considerations are not relevant to your application, then you can freely use ViewChild to access the native element.
+- In addition, using `nativeElement` can pose a security threat, especially when accessing its `innerHtml` property. It can make an application more vulnerable to cross-site scripting, XSS, attacks. If these considerations are not relevant to your application, then you can freely use ViewChild to access the native element.
 
 > How to set focus on element Angular: https://stackoverflow.com/questions/50006888/set-focus-on-input-element
 
-### Step 5. Now lets have a look into `ViewChildren` 
+### Step 5. Now lets have a look into `ViewChildren`
 
-__src/app/games/game-list/game-list.component.html__
+**src/app/games/game-list/game-list.component.html**
 
-```diff 
+```diff
 <!-- Filter by the Title   -->
 <div class='row'>
     <div class='col-md-2'>Filter by:</div>
@@ -201,14 +206,14 @@ __src/app/games/game-list/game-list.component.html__
 +   <div class='col-md-4'>
 +       <input type='text' #nameElement
 +               [(ngModel)]='listFilter' />
-+       
++
 +   </div>
 </div>
 ```
 
-__src\app\games\game-list\game-list.component.ts__
+**src\app\games\game-list\game-list.component.ts**
 
-```diff 
+```diff
 -import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 +import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { NgModel } from '@angular/forms';
@@ -257,13 +262,13 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
 ```
 
-* Now we can check out in console what is going on there.
+- Now we can check out in console what is going on there.
 
-### Step 6. Accesing View Children by Drective 
+### Step 6. Accesing View Children by Drective
 
 Now lets change it to `NgModel`, that will the same input elements access.
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```diff
 +import { NgModel } from '@angular/forms';
@@ -273,13 +278,13 @@ __src/app/games/game-list/game-list.component.ts__
 inputElementRefs: QueryList<ElementRef>;
 ```
 
-* Now we can check out in console what is going on there.
+- Now we can check out in console what is going on there.
 
-### Step 7. Getting Notifications from ViewChild 
+### Step 7. Getting Notifications from ViewChild
 
 We can use ViewChild decorator to get notifications when user makes changes.
 
-__src/app/games/game-list/game-list.component.html__
+**src/app/games/game-list/game-list.component.html**
 
 ```diff
 <div class='row'>
@@ -296,7 +301,7 @@ __src/app/games/game-list/game-list.component.html__
 </div>
 ```
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```diff
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
@@ -348,7 +353,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
 We create `@ViewChild` with a reference to the `NgModel` directive.
 
-__src/app/games/game-list/game-list.component.ts__
+**src/app/games/game-list/game-list.component.ts**
 
 ```diff
 ...
@@ -356,10 +361,11 @@ __src/app/games/game-list/game-list.component.ts__
 +@ViewChild(NgModel) filterInput!: NgModel;
 ...
 ```
-* The difference between both, is that in the first case we can access the native element
-* The second case we are getting access to the ngModel data structures. We are not accessing the native element.
 
-__src\app\games\game-list\game-list.component.ts__
+- The difference between both, is that in the first case we can access the native element
+- The second case we are getting access to the ngModel data structures. We are not accessing the native element.
+
+**src\app\games\game-list\game-list.component.ts**
 
 ```diff
 ngAfterViewInit(): void {
@@ -381,4 +387,4 @@ ngAfterViewInit(): void {
 }
 ```
 
-* Now we can check if the filter is working again.
+- Now we can check if the filter is working again.

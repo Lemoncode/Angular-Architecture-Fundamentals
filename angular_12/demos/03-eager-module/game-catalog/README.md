@@ -50,7 +50,9 @@ export interface UserModel {
 ng g s user/auth --flat --skip-tests
 ```
 
-```typescript auth.service.ts
+* Update `auth.service.ts`
+
+```typescript 
 import { Injectable } from '@angular/core';
 
 import { UserModel } from './user.model';
@@ -85,7 +87,7 @@ export class AuthService {
 ### Step 3. Create `auth-guard` service.
 
 ```bash
-$ ng g s user/auth-guard --skip-tests
+ng g s user/auth-guard --skip-tests
 ```
 
 ```typescript auth-guard.serevice.ts

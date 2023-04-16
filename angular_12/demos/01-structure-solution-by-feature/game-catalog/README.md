@@ -264,7 +264,8 @@ export class ShellComponent implements OnInit {
 
 ### Step 9. Now we have to modify our `app.module.ts` with some routing to display the changes that we have done.
 
-```typescript app.module.ts
+```typescript 
+// app.module.ts
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';

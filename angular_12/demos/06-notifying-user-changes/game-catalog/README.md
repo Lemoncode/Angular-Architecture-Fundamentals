@@ -54,7 +54,9 @@ Lets use the two way binding long way in our code
 
 __src/app/games/game-list/game-list.component.html__
 
-```diff game-list.component.html
+* Update `game-list.component.html`
+
+```diff 
 <div class='row'>
     <div class='col-md-2'>Filter by:</div>
     <div class='col-md-4'>
@@ -67,7 +69,9 @@ __src/app/games/game-list/game-list.component.html__
 </div>
 ```
 
-```diff game-list.component.ts
+* Update `game-list.component.ts`
+
+```diff 
 ....
 toggleImage(): void {
   this.showImage = !this.showImage;
@@ -87,7 +91,8 @@ Defining a property. Lets move the two way binding long way to getter / setter.
 
 * In TypeScript we can define a property two ways
 
-```typescript Property Declaration
+```typescript 
+// Property Declaration
 listFilter: string;
 ```
 
@@ -101,7 +106,8 @@ set listFilter(value: string) {
 }
 ```
 
-```typescript common pattern
+```typescript 
+// common pattern
 private _listFilter: string;
 
 get listFilter(): string {
@@ -114,11 +120,16 @@ set listFilter(value: string) {
 ```
 * Any time we change our value on setter we will get notified!
 
-```diff game-list.component.html
+* Update `game-list.component.html`
+
+```diff 
 +<input type='text' [(ngModel)]='listFilter' />
 -<input type="text" [ngModel]="listFilter" (ngModelChange)="onFilterChange($event)">
 ```
-```diff game-list.component.ts
+
+* Update `game-list.component.ts`
+
+```diff 
 ...
 -onFilterChange(filter: string): void {
 -  this.listFilter = filter;
