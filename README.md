@@ -6,3 +6,8 @@ This repository will cover Angular techniques to  manage state and use the best 
 > Reference: https://johnpapa.net/introducing-angular-modules-feature-modules-2/
 > Reference: https://johnpapa.net/introducing-angular-modules-routing-module/
 > Reference ngConf: https://www.youtube.com/watch?v=piQ0EZhtus0
+
+## Updated references
+
+- https://angular.io/guide/module-types#guidelines-for-creating-ngmodules
+
