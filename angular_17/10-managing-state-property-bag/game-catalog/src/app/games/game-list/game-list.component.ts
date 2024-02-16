@@ -5,12 +5,13 @@ import {
   ViewChild,
   ElementRef,
   QueryList,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { GameModel } from '../game.model';
 import { GameService } from '../game.service';
 import { NgModel } from '@angular/forms';
 import { CriteriaComponent } from '../../shared/criteria/criteria.component';
+import { GameParameterService } from '../game-parameter.service';
 
 @Component({
   selector: 'app-game-list',
@@ -18,22 +19,31 @@ import { CriteriaComponent } from '../../shared/criteria/criteria.component';
   styleUrl: './game-list.component.css',
 })
 export class GameListComponent implements OnInit, AfterViewInit {
-  showImage!: boolean;
+  // showImage!: boolean;
 
   imageWidth = 50;
   imageMargin = 2;
 
   @ViewChild(CriteriaComponent) filterComponent!: CriteriaComponent;
-  parentListFilter = "";
+  parentListFilter = '';
 
   filteredGames!: GameModel[];
   games!: GameModel[];
 
   includeDetail = true;
 
-  constructor(private gameService: GameService) {
-    
+  get showImage(): boolean {
+    return this.gameParameterService.showImage;
   }
+
+  set showImage(value: boolean) {
+    this.gameParameterService.showImage = value;
+  }
+
+  constructor(
+    private gameService: GameService,
+    private gameParameterService: GameParameterService
+  ) {}
 
   ngAfterViewInit(): void {
     this.parentListFilter = this.filterComponent.listFilter;
@@ -42,12 +52,14 @@ export class GameListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.gameService.getGames().subscribe((games: GameModel[]) => {
       this.games = games;
-      this.performFilter(this.parentListFilter);
+      this.filterComponent.listFilter = this.gameParameterService.filterBy;
+      // this.performFilter(this.parentListFilter);
     });
   }
 
   onValueChange(value: string): void {
     this.performFilter(value);
+    this.gameParameterService.filterBy = value;
   }
 
   toggleImage(): void {

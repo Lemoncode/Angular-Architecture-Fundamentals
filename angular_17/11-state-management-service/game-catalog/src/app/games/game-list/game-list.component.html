@@ -11,17 +11,6 @@
       (valueChange)="onValueChange($event)"
       class="col-md-10"
     ></app-criteria>
-    <!-- <div class="row">
-      <div class="col-md-2">Filter by:</div>
-      <div class="col-md-4">
-        <input type="text" #filterElement [(ngModel)]="listFilter" />
-      </div>
-    </div>
-    <div class="row" [hidden]="!listFilter">
-      <div class="col-md-10">
-        <h3>Filtered by: {{ listFilter }}</h3>
-      </div>
-    </div> -->
 
     <div class="table-responsive">
       <table class="table" *ngIf="games && games.length">
@@ -36,6 +25,7 @@
             <th>Code</th>
             <th>Available</th>
             <th>Price</th>
+            <th>Rating</th>
             <th></th>
           </tr>
         </thead>
@@ -50,10 +40,20 @@
                 [style.margin.px]="imageMargin"
               />
             </td>
-            <td>{{ game.name }}</td>
+            <td>
+              <a [routerLink]="['/games', game.id]">
+                {{ game.name }}
+              </a>
+            </td>
             <td>{{ game.code }}</td>
             <td>{{ game.release }}</td>
             <td>{{ game.price | currency : "USD" : "symbol" : "1.2-2" }}</td>
+            <td>{{ game.rating }}</td>
+            <td>
+              <a class="btn" [routerLink]="['/games', game.id, 'edit']">
+                Edit
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>

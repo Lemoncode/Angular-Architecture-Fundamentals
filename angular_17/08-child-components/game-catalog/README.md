@@ -144,13 +144,7 @@ import { GameService } from '../game.service';
 **src/app/shared/criteria/criteria.component.ts**
 
 ```typescript
-import {
-  Component,
-  OnInit,
-  AfterViewInit,
-  ViewChild,
-  ElementRef,
-} from "@angular/core";
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from "@angular/core";
 
 @Component({
   selector: "app-criteria",
@@ -303,16 +297,7 @@ We want to display a message depending on hit numbers. We can be notifyed be cha
 **src/app/shared/criteria/criteria.component.ts**
 
 ```typescript
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewInit,
-  Input,
-  OnChanges /*diff*/,
-  SimpleChanges /*diff*/,
-} from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, OnChanges /*diff*/, SimpleChanges /*diff*/ } from "@angular/core";
 
 @Component({
   selector: "app-criteria",
@@ -325,7 +310,7 @@ export class CriteriaComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild("filterElement") filterElementRef: ElementRef;
   @Input() displayDetail: boolean;
   @Input() hitCount: number;
-  hitMessage: string;
+  hitMessage!: string;
 
   constructor() {}
 
@@ -391,15 +376,7 @@ Now we are going to use this reference in the parent component class.
 **src/app/games/game-list/game-list.component.ts**
 
 ```typescript
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-  ElementRef,
-  QueryList,
-  ViewChildren,
-} from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, QueryList, ViewChildren } from "@angular/core";
 import { NgModel } from "@angular/forms";
 
 import { GameModel } from "../game.model";
@@ -445,11 +422,7 @@ export class GameListComponent implements OnInit, AfterViewInit {
 
   performFilter(filterBy?: string): void {
     if (filterBy) {
-      this.filteredGames = this.games.filter(
-        (g: GameModel) =>
-          g.name.toLocaleLowerCase().indexOf(filterBy.toLocaleLowerCase()) !==
-          -1
-      );
+      this.filteredGames = this.games.filter((g: GameModel) => g.name.toLocaleLowerCase().indexOf(filterBy.toLocaleLowerCase()) !== -1);
     } else {
       this.filteredGames = this.games;
     }
