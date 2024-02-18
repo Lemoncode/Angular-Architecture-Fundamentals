@@ -46,14 +46,16 @@ export class GameListComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
+    this.filterComponent.listFilter = this.gameParameterService.filterBy;
     this.parentListFilter = this.filterComponent.listFilter;
   }
 
   ngOnInit(): void {
     this.gameService.getGames().subscribe((games: GameModel[]) => {
       this.games = games;
-      this.filterComponent.listFilter = this.gameParameterService.filterBy;
-      // this.performFilter(this.parentListFilter);
+      if (this.filterComponent) {
+        this.filterComponent.listFilter = this.gameParameterService.filterBy;
+      }
     });
   }
 
